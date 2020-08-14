@@ -1,0 +1,10 @@
+<div class="dropzone">
+    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="handleDrop($event)">
+    <img src="../../assets/upload.png">
+    <p>Drag and drop here</p>
+    <p>or</p>
+    <p>browes for file</p>
+</div>
+<div id="progressBar" #progressBar></div>
+<div id="photoAlbum" #photoAlbum></div>
+<div id="gallery" #gallery></div>

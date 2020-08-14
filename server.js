@@ -6,6 +6,7 @@ var http = require('http')
 
 app.use(express.static(__dirname + '/dist/pibox'))
 app.use(express.static("/home/pi/Desktop/Movies"))
+app.use(express.static("/home/pi/Desktop/Media"))
 
 let userRoutes = require('./server/routes/movies.routes')
 

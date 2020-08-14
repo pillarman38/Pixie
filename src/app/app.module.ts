@@ -7,17 +7,20 @@ import { VideoSelectionComponent } from './video-selection/video-selection.compo
 import { VideoPlayerComponent } from './video-player/video-player.component';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { PhotoBoothComponent } from './photo-booth/photo-booth.component';
 
 const appRoutes = [
   {path: 'videoPlayer', component: VideoPlayerComponent},
-  {path: 'videoSelection', component: VideoSelectionComponent}
+  {path: 'videoSelection', component: VideoSelectionComponent},
+  {path: 'photoBooth', component: PhotoBoothComponent}
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     VideoSelectionComponent,
-    VideoPlayerComponent
+    VideoPlayerComponent,
+    PhotoBoothComponent
   ],
   imports: [
     BrowserModule,
