@@ -13,12 +13,12 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private http: HttpClient) { }
   
   power(){
-    this.http.get('http://192.168.4.1:4012/api/mov/power').subscribe((res: any[]) => {
+    this.http.get('http://192.168.1.86:4012/api/mov/power').subscribe((res: any[]) => {
       console.log(res)
     })
   }
 
   ngOnInit() {
-    this.router.navigateByUrl('/videoSelection')
+    // this.router.navigateByUrl('/videoSelection')
   }
 }

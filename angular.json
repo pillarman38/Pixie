@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "pibox"
+    }
+  },
+  "defaultProject": "pibox",
+  "cli": {
+    "analytics": false
+  }
 }

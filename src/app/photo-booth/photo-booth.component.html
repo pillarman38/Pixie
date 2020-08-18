@@ -1,6 +1,6 @@
 <div class="dropzone">
     <input type="file" #fileDropRef id="fileDropRef" multiple (change)="handleDrop($event)">
-    <img src="../../assets/upload.png">
+    <img src="../../assets/upload.png" width="100" height="100">
     <p>Drag and drop here</p>
     <p>or</p>
     <p>browes for file</p>
@@ -8,3 +8,12 @@
 <div id="progressBar" #progressBar></div>
 <div id="photoAlbum" #photoAlbum></div>
 <div id="gallery" #gallery></div>
+<div *ngFor="let photo of photos" style="display: inline; float: left;">
+    <img src={{photo}}  width="100" height="100" (click)="photoView(photo)">
+</div>
+<div>
+    <div *ngFor="let vid of videos" style="background-color: red;" (click)="saveSelected(vid)">
+        <p style="color: white;">{{vid.title}}</p>
+    </div>
+
+</div>
