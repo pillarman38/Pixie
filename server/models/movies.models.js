@@ -48,7 +48,11 @@ let routeFunctions = {
 
             for(var i = 0; i < files.length; i++) {
             if(path.extname(`J:/storage/${files[i]}`) == ".png" || path.extname(`J:/storage/${files[i]}`) == ".PNG" || path.extname(`J:/storage/${files[i]}`) == ".jpg" || path.extname(`J:/storage/${files[i]}`) == ".jpeg") { 
-                    uri = `http://192.168.1.86:4012/${files[i].replace(new RegExp(' ', 'g'), "%20")}`
+                uri = {
+                    location: `http://192.168.1.86:4012/${files[i].replace(new RegExp(' ', 'g'), "%20")}`,
+                    title: files[i],
+                    percent: 100
+                }
                     updaterObj['photo'].push(uri)
                 }
                 if(path.extname(`J:/storage/${files[i]}`) == ".mp4" || path.extname(`J:/storage/${files[i]}`) == ".MOV") {
@@ -100,8 +104,7 @@ let routeFunctions = {
                         setTimeout(() => {
                             console.log("Going back")
                             callback(updaterObj)
-                        },3000)
-                         
+                        },3000) 
                     }
                 }
             })
