@@ -22,13 +22,18 @@ export class PhotoBoothComponent implements OnInit {
 
   i = 0;
 
-  arrOfFiles = []
+  arrOfPhotos = []
+  arrOfVideos = []
+  videosBefore = []
   videos = []
   photosBefore = []
   photos = []
 
   constructor(private http: HttpClient, private photoServ: PhotoUploaderService, private webSocket: WebsocketService, private clickedMovie: ClickedMovieService, private router: Router, private photoViewServ: PhotoViewService) { }
-
+  getExtention(filename) {
+    var parts = filename.split('.');
+    return parts[parts.length - 1];
+  }
   counter(e) {
     if(this.i != e.target.files.length){
       this.i++;
@@ -42,34 +47,51 @@ export class PhotoBoothComponent implements OnInit {
     formData.append("photos", e.target.files[this.i]);
     
     var web = this.webSocket
+    var extention = this.getExtention(e.target.files[this.i]['name'])
+    console.log(extention)
     var uploadObj = {
       percent: 0,
       index: this.i,
+      type: extention,
       location: `http://192.168.1.86:4012/${e.target.files[this.i]['name'].replace(new RegExp(' ', 'g'), '%20')}`,
       title: e.target.files[this.i]['name']
     }
-    
-    this.arrOfFiles.push(uploadObj)
+    if(uploadObj['type'] == "png" || uploadObj['type'] == "jpeg") {
+     this.arrOfPhotos.push(uploadObj)
+    }
+    if(uploadObj['type'] == "mov" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
+      this.arrOfVideos.push(uploadObj)
+    }
     this.http.post("http://192.168.1.86:4012/api/mov/uploadmedia", formData, {
         reportProgress: true,
         observe: "events"
       }).subscribe((data) => {
         console.log(this.i, data)
-        
+          
           var uploadProgress = 0
           uploadProgress =  Math.ceil((data['loaded'] / data['total']) * 100)
           
           if(!isNaN(uploadProgress)) {
-            var found = this.arrOfFiles.find(function(post, index) {
+            var foundPhoto = this.arrOfPhotos.find(function(post, index) {
               if(post.title == uploadObj['title']){
                 post['percent'] = uploadProgress
               }
             });
-            
-            web.emit("photoUpdater", this.arrOfFiles)
-            console.log(found)
+            var foundVideo = this.arrOfVideos.find(function(post, index) {
+              if(post.title == uploadObj['title']){
+                post['percent'] = uploadProgress
+              }
+            });
+            if(uploadObj['type'] == "png" || uploadObj['type'] == "jpeg") {
+              console.log("picture")
+              web.emit("photoUpdater", this.arrOfPhotos)
+            }
+            if(uploadObj['type'] == "mov" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
+              console.log("video");
+              
+              web.emit("videoUpdater", this.arrOfVideos)
+            }
           }
-          
       })
     this.counter(e)
   }
@@ -78,15 +100,25 @@ export class PhotoBoothComponent implements OnInit {
     this.photoViewServ.selectedPhoto = e.location
     this.router.navigateByUrl('/photoViewer')
   }
+  saveSelected(e) {
+    this.clickedMovie.saveVideo = e
+    this.router.navigateByUrl('/videoPlayer')
+  }
   ngOnInit(): void {
     this.http.get('http://192.168.1.86:4012/api/mov/getmedia').subscribe((data) => {
       console.log(data)
       this.videos = data['video']
       this.photosBefore = data['photo']
+      this.videosBefore = data['video']
+      this.photoViewServ.photosArr = data['photo']
     })
     this.webSocket.listen('photoUpdate').subscribe((data: any[]) => {
       console.log(data)
       this.photos = data
+    })
+    this.webSocket.listen('videoUpdate').subscribe((data: any[]) => {
+      console.log(data)
+      this.videos = data
     })
     this.webSocket.listen('test event').subscribe((data: any[]) => {
       console.log(data)

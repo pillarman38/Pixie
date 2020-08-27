@@ -1,0 +1,10 @@
+.center-fit {
+    max-width: 100%;
+    height: auto;
+    margin:auto;
+}
+#topper {
+    border: 2px solid green;
+    margin-top: 50px;
+    height: 94.5vh;
+}

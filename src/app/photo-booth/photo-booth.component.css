@@ -1,0 +1,34 @@
+#photosBefore {
+  float: left;
+}
+.photosAfter {
+    float: left;
+  }
+.dropzone {
+    padding-bottom: 100px;
+}
+#videos {
+    clear: both;
+}
+#uploader {
+    position: absolute;
+    width: 100%;
+    height: 25px;
+    background-color: yellow;
+    opacity:0;
+}
+#browse{
+    position: relative;
+    z-index: -1;
+}
+.overlay-layer {
+    width: 100%;
+    position: fixed;
+    margin-top: 50px;
+    color: white;
+    background-color: darkblue;
+    text-align: center;
+}
+p{
+    color: white;
+}

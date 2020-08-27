@@ -1,39 +1,55 @@
 <div class="dropzone">
-    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="handleDrop($event)">
-    <img src="../../assets/upload.png" width="100" height="100">
-    <p>Drag and drop here</p>
-    <p>or</p>
-    <p>browes for file</p>
+    <div class="overlay-layer">
+        <input type="file" #fileDropRef id="fileDropRef" multiple (change)="handleDrop($event)" id="uploader"><p id="browse">Browse</p>
+   </div>
 </div>
-<div id="progressBar" #progressBar></div>
-<div id="photoAlbum" #photoAlbum></div>
-<div id="gallery" #gallery></div>
 
-<div *ngFor="let photo of photosBefore" style="display: inline; float: left;">
-    <div *ngIf="photo.percent != 100">
-        <div [style.width]="photo.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> 
-    </div>
-    <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)">
-    </div>
-    <div *ngIf="photo.percent == 100">
-        <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)">
+<div id="photos">
+    <div *ngFor="let photo of photosBefore" style="float: left; margin: 10px; padding: 10px; background-color: blue;">
+        <div *ngIf="photo.percent != 100">
+            <!-- <div [style.width]="photo.percent+'px'" [style.height]="10+'px'" style="background-color: green;">  </div> -->
+        </div>
+        <!-- <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)"> -->
+        <div *ngIf="photo.percent == 100">
+            <img src="{{photo.location}}"  width="100" height="100" (click)="photoView(photo)">
+        </div>
     </div>
 </div>
 
-<div *ngFor="let photo of photos" style="display: inline; float: left;">
-    <div *ngIf="photo.percent != 100">
-        <div [style.width]="photo.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> 
-    </div>
-    <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)">
-    </div>
-    <div *ngIf="photo.percent == 100">
-        <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)">
+<div id="photos">
+    <div *ngFor="let photo of photos" style="float: left; margin: 10px; padding: 10px; background-color: blue;">
+        <div *ngIf="photo.percent != 100">
+            <div style="height: 100px; width: 100px; float: left; margin: 10px; padding: 10px; background-color: blue;"></div>
+            <div [style.width]="photo.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> </div>
+        </div>
+        <div *ngIf="photo.percent == 100">
+            <img src="{{photo.location}}"  width="100" height="100" (click)="photoView(photo)">
+        </div>
     </div>
 </div>
 
 
-<div>
-    <div *ngFor="let vid of videos" style="background-color: red;" (click)="saveSelected(vid)">
-        <p style="color: white;">{{vid.title}}</p>
+<div id="videos">
+    <div *ngFor="let vid of videosBefore" (click)="saveSelected(vid)">
+        <div *ngIf="vid.percent != 100">
+            <div [style.width]="vid.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> </div>
+        </div>
+        <!-- <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)"> -->
+        <div *ngIf="vid.percent == 100">
+            <p style="color: white;">{{vid.title}}</p>
+        </div>
+        </div>
     </div>
-</div>
+
+<div id="videos">
+    <div *ngFor="let vid of videos" (click)="saveSelected(vid)">
+        <div *ngIf="vid.percent != 100">
+            <div [style.width]="vid.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> </div>
+        </div>
+        <!-- <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)"> -->
+        <div *ngIf="vid.percent == 100">
+            <p style="color: white;">{{vid.title}}</p>
+        </div>
+        </div>
+    </div>
+

@@ -36,8 +36,11 @@ router.get('/getmedia', (req, res) => {
 })
 
 router.post('/uploadmedia', upload.any(), function (req, res, next) {
-    
-    models.uploadMedia(`http://192.168.1.86:4012/${req.body['photos']}`, (err, resp) => {
+    console.log(req.files)
+    models.uploadMedia({
+       location: `http://192.168.1.86:4012/${req.files[0]['filename'].replace(new RegExp(' ', 'g'), '%20')}}`,
+        size: req.files[0]['size']
+    },  (err, resp) => {
         // console.log("REQ.BODY", req.fiies, req.body, err, resp)
         if(err) {
             // console.log(err)

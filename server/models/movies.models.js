@@ -58,7 +58,8 @@ let routeFunctions = {
                 if(path.extname(`J:/storage/${files[i]}`) == ".mp4" || path.extname(`J:/storage/${files[i]}`) == ".MOV") {
                     uri = {
                         location: `http://192.168.1.86:4012/${files[i].replace(new RegExp(' ', 'g'), "%20")}`,
-                        title: files[i]
+                        title: files[i],
+                        percent: 100
                     }
                     updaterObj['video'].push(uri)
                 } 
@@ -71,6 +72,9 @@ let routeFunctions = {
         })
     },
     uploadMedia: (photoInfo, callback) => {
+        var filesize = photoInfo['size']
+        console.log("INFO", photoInfo, filesize)
+        
         var updaterObj = {
             video: [],
             photo: []
@@ -79,6 +83,7 @@ let routeFunctions = {
         
         function listSize() {
             getSize("J:/storage", (err, size) => {
+                
             if (err) { throw err; }
             currentSize = size
 
@@ -98,27 +103,23 @@ let routeFunctions = {
                         }
                         updaterObj['video'].push(uri)
                     } 
-
+                    
                     if(files.length - 1 === i) {
                         console.log(i, files.length)
                         setTimeout(() => {
+                            console.log("Sizes round 2", currentSize, filesize, lastSize, filesize + currentSize)
                             console.log("Going back")
                             callback(updaterObj)
                         },3000) 
                     }
                 }
             })
-          } else {
-              
-          }
+          } 
         })
     }
         setTimeout(() => {
-            console.log("Sizes", lastSize, currentSize)
-            // if(lastSize == currentSize) {
-            //     lastSize = 0
-            //     currentSize = 0
-            // }
+            console.log("Sizes", currentSize, filesize, lastSize, filesize + currentSize)
+           
             listSize()
         }, 1000)
     },

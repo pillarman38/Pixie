@@ -37,6 +37,10 @@ io.on('connection', socket => {
         //   console.log("HIIIIIIIIIIIIIIII", username);
           io.sockets.emit("photoUpdate", username)
         });
+    socket.on('videoUpdater', (username) => {
+        //   console.log("HIIIIIIIIIIIIIIII", username);
+          io.sockets.emit("videoUpdate", username)
+        });
     // Listen for chatMessage
     socket.on('chatMessage', msg => {
         const user = getCurrentUser(socket.id);
