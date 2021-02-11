@@ -138,6 +138,12 @@ let routeFunctions = {
         newProc.on('close', function(data) {
             console.log(data)
         })
+    },
+    dirinfogetter: (callback) => {
+        fs.readdir('J:/Movies', (err, files) =>{
+            console.log(files);
+            callback(files)
+        })
     }
 }
 module.exports = routeFunctions

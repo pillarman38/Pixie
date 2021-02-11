@@ -9,12 +9,14 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { PhotoBoothComponent } from './photo-booth/photo-booth.component';
 import { PhotoViewerComponent } from './photo-viewer/photo-viewer.component';
+import { CopierComponent } from './copier/copier.component';
 
 const appRoutes = [
   {path: 'videoPlayer', component: VideoPlayerComponent},
   {path: 'videoSelection', component: VideoSelectionComponent},
   {path: 'photoBooth', component: PhotoBoothComponent},
-  {path: 'photoViewer', component: PhotoViewerComponent}
+  {path: 'photoViewer', component: PhotoViewerComponent},
+  {path: "copier", component: CopierComponent}
 ]
 
 @NgModule({
@@ -23,7 +25,8 @@ const appRoutes = [
     VideoSelectionComponent,
     VideoPlayerComponent,
     PhotoBoothComponent,
-    PhotoViewerComponent
+    PhotoViewerComponent,
+    CopierComponent
   ],
   imports: [
     BrowserModule,

@@ -63,4 +63,15 @@ router.get('/power', (req, res) => {
     })
 })
 
+router.get('/dirinfogetter', (req, res) => {
+    models.dirinfogetter((err, resp)=>{
+        // console.log(err, res)
+        if(err){
+            res.send(err)
+        } else {
+            res.send(resp)
+        }
+    })
+})
+
 module.exports = router
