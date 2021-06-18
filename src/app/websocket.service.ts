@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class WebsocketService {
 
   socket: any;
-  uri = "http://192.168.1.86:4012"
+  uri = "http://192.168.4.1:4012"
 
   constructor() { 
     this.socket = io(this.uri)

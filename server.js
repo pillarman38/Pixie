@@ -7,11 +7,15 @@ const app = express();
 var fs = require('fs')
 const server = http.createServer(app);
 const io = socketio(server);
+var bodyParser = require('body-parser') 
 // var socketsFile = require('./sockets')
 
 // Set static folder
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(express.static(__dirname + '/dist/pibox'))
-app.use(express.static("J:/storage"))
+app.use(express.static("I:/storage"))
+app.use(express.static("/home/pi/Desktop/Movies"))
 app.use(express.static("/home/pi/Desktop/Media"))
 
 let userRoutes = require('./server/routes/movies.routes');

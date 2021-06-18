@@ -1,0 +1,53 @@
+#container {
+    margin-top: 60px;
+    width: 100%;
+    display: flex;  
+    flex-direction: row; /* let the content flow to the next row */
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    /* This aligns items to the end line on main-axis */
+  }
+  p {
+      color: white;
+  }
+  .imbBorder {
+      border: 2px solid gray;
+  }
+  .selected {
+    border: 2px solid green;
+  }
+#ejectorSeat {
+   position: absolute;
+   width: 100px;
+   height: 100px;
+}
+#triangle {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid red;
+}
+#ejectBar {
+    margin-top: 5px;
+    height: 5px;
+    width: 30px;
+    background-color: red;
+}
+#right {
+float: right;
+border: 2px solid red;
+margin-top: 100px;
+   width: 25%;
+   height: 100%;
+   background-color: blue;
+}
+#left {
+float: left;
+border: 2px solid red;
+margin-top: 100px;
+   width: 25%;
+   height: 100%;
+   background-color: blue;
+}

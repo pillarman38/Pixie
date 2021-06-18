@@ -53,7 +53,7 @@ export class PhotoBoothComponent implements OnInit {
       percent: 0,
       index: this.i,
       type: extention,
-      location: `http://192.168.1.86:4012/${e.target.files[this.i]['name'].replace(new RegExp(' ', 'g'), '%20')}`,
+      location: `http://192.168.4.1:4012/${e.target.files[this.i]['name'].replace(new RegExp(' ', 'g'), '%20')}`,
       title: e.target.files[this.i]['name']
     }
     if(uploadObj['type'] == "png" || uploadObj['type'] == "jpeg") {
@@ -62,7 +62,7 @@ export class PhotoBoothComponent implements OnInit {
     if(uploadObj['type'] == "mov" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
       this.arrOfVideos.push(uploadObj)
     }
-    this.http.post("http://192.168.1.86:4012/api/mov/uploadmedia", formData, {
+    this.http.post("http://192.168.4.1:4012/api/mov/uploadmedia", formData, {
         reportProgress: true,
         observe: "events"
       }).subscribe((data) => {
@@ -105,7 +105,7 @@ export class PhotoBoothComponent implements OnInit {
     this.router.navigateByUrl('/videoPlayer')
   }
   ngOnInit(): void {
-    this.http.get('http://192.168.1.86:4012/api/mov/getmedia').subscribe((data) => {
+    this.http.get('http://192.168.4.1:4012/api/mov/getmedia').subscribe((data) => {
       console.log(data)
       this.videos = data['video']
       this.photosBefore = data['photo']

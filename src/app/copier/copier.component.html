@@ -1,1 +1,31 @@
-<p>copier works!</p>
+
+<div id="container">
+
+<div id="ejectorSeat" (click)="eject()">
+    <div id="triangle"></div>
+    <div id="ejectBar"></div>
+</div> 
+<div id="left">
+<div *ngFor="let itm of filesystem">
+    <div class="imbBorder">
+        <p>{{itm}}</p>
+        <img src="../../assets/kisspng-portable-network-graphics-computer-icons-directory-sonular-trkye-modern-pentatlon-federasyonu-5c06eb56b976d8.7464961015439573347597.png" width="100" height="100">
+	<button type="button" (click)="delete(itm)">Delete</button>    
+    </div>
+</div>
+</div>
+
+<div id="right">
+<div *ngFor="let itm of usb">
+    <div class="imbBorder">
+        <p>{{itm}}</p>
+        <img src="../../assets/kisspng-portable-network-graphics-computer-icons-directory-sonular-trkye-modern-pentatlon-federasyonu-5c06eb56b976d8.7464961015439573347597.png" width="100" height="100">
+	<button type="button" (click)="move(itm)">Move</button>    
+    </div>
+</div>
+</div>
+
+<div *ngIf="selected">
+        <button (click)="move()">Move</button>
+    </div>
+</div>
