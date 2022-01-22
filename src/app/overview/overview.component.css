@@ -1,0 +1,71 @@
+#container {
+    margin-top: 50px;
+    height: 100p;
+}
+p {
+    color: white;
+}
+#in {
+    float: left;
+    width: 300px;
+    margin: 10px;
+    height: 300px;
+    overflow: hidden;
+}
+#why {
+    margin: 10px;
+    float: left;
+}
+#background {
+    width: 100vw;
+    height: 100vw;
+    
+    position: relative;
+}
+#stack {
+    position: absolute;
+    width: 200px;
+    top: 0;
+    left: 0
+}
+img {
+    width: 150px;
+}
+.icon-play {
+    position: absolute;
+    font-size: 1.5em;
+    left: 52%;
+    top: 50%;
+    transform: translate(-48%, -50%);
+    transition: all 70ms;
+    color: #ffffff;
+  }
+  .button {
+	background-image: radial-gradient(circle at 50% 50%, #ff822e, #dd480d);
+	width: 150px;
+    height: 50px;
+    
+	line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    color: #fff;
+    cursor: pointer;
+	border-radius: 5px;
+	box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
+}
+#grade {
+    background-image: linear-gradient(360deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.75) 48%, rgba(0,0,0,0.73) 100%);
+    width: 100vw;
+    position: absolute;
+}
+#info {
+    position: relative;
+    top: 0;
+    height: 57vw;
+    z-index: 0;
+}
+#plot {
+    margin-top: 10px;
+    width: 30%;
+    float: left;
+}

@@ -1,0 +1,30 @@
+<div id="container">
+    
+        <div #somecontent id="background">
+        <div id="grade">
+    <div id="info">
+        <div id="why">
+            <img src="{{video.backdrop_path}}">
+        
+        </div>
+    
+    
+    <div id="in">
+        <p>{{video.title}}</p>
+        <div class="button" (click)="saveSelected($event)">
+            <p>Play</p>
+        </div>
+        <p>Cast</p>
+        <div *ngFor="let name of cast.acting" >
+            <p id="castList">{{name.name}}-{{name.character}}</p>
+        </div>
+    </div>
+    <div id="plot">
+        <p>{{video.overview}}</p>
+    </div>
+    
+</div>
+
+</div>
+</div>
+</div>

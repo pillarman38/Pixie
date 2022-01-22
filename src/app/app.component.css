@@ -2,7 +2,8 @@
     margin-top: 0px;
     position: absolute;
     z-index: -1;
-
+    width: 100%;
+    height: 100%
 }
 .header {
     top: 0;
@@ -16,18 +17,33 @@
 .button {
     display: inline-block;
     float: left;
-	background-color: color;
-	width: 20%;
+	  background-color: color;
+	  width: 20%;
     height: 100%;
+    text-decoration: none;
     top: 0;
-	line-height: 50px;
+	  line-height: 50px;
     text-align: center;
     vertical-align: middle;
     color: #fff;
     cursor: pointer;
-    
-	border-radius: 5px;
-	box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
+	  border-radius: 5px;
+	  box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
+}
+#powerBtn {
+  display: inline-block;
+  float: left;
+  background-color: rgba(255, 38, 0, 0.507);
+  width: 20%;
+  height: 100%;
+  top: 0;
+  line-height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
 }
 .logoCirOne {
   background: linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%);
@@ -93,7 +109,6 @@
     font-size:24px;
   }
 }
-
 
 * {
   box-sizing: border-box;
@@ -260,4 +275,51 @@ input:checked + .toggle__bg .toggle__sphere {
 
 input:checked + .toggle__bg .toggle__sphere-bg {
   transform: rotateY(180deg);
+}
+
+#wrapper {
+  display: inline-block;
+  width: 200px;
+  z-index: 1;
+}
+
+.container {
+  display: inline-block;
+  margin: 10px;
+  z-index: 1;
+}
+
+.container .progress {
+  margin: 0 auto;
+  width: 400px;
+}
+
+.progress {
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+}
+
+#progressBar {
+  color: white;
+  height: 16px;
+  border-radius: 4px;
+  margin-top: 10px;
+	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  -webkit-transition: 0.4s linear;
+  -moz-transition: 0.4s linear;
+  -o-transition: 0.4s linear;
+  transition: 0.4s linear;
+  -webkit-transition-property: width, background-color;
+  -moz-transition-property: width, background-color;
+  -o-transition-property: width, background-color;
+  transition-property: width, background-color;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+  background-color: #f2b01e;
 }

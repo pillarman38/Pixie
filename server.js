@@ -1,3 +1,4 @@
+require('./config/config')
 const path = require('path');
 const http = require('http');
 const express = require('express');
@@ -8,6 +9,7 @@ var fs = require('fs')
 const server = http.createServer(app);
 const io = socketio(server);
 var bodyParser = require('body-parser') 
+var electron = require('electron')
 // var socketsFile = require('./sockets')
 
 // Set static folder
@@ -57,3 +59,19 @@ io.on('connection', socket => {
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
+
+
+function createWindow() {
+  const win = new electron.BrowserWindow({
+    // width: 800,
+    // height: 600,
+    webPreference: {
+      worldSafeExecuteJavaScript: true,
+      contextIsolation: true
+    }
+  })
+  win.loadURL('http://192.168.4.1:4012')
+  win.setKiosk(true)
+  win.webContents.openDevTools();
+}
+electron.app.whenReady().then(createWindow)

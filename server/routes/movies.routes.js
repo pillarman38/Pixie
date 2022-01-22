@@ -3,7 +3,7 @@ let router = express.Router()
 let models = require('../models/movies.models')
 let multer = require('multer')
 
-let photoPath = "I:/storage"
+let photoPath = "/home/pi/Desktop/Media"
 
 var storage = multer.diskStorage({
     destination: function(req, file, next) {
@@ -16,8 +16,27 @@ var storage = multer.diskStorage({
 
 var upload = multer({storage: storage})
 
-router.get('/movieList', (req, res) => {
+router.get('/movieListOnStartup', (req, res) => {
     models.getMovieList(req.body, (err, resp)=>{
+        if(err){
+            res.send(err)
+        } else {
+            res.send(resp)
+        }
+    })
+})
+router.post('/moreMoviesOnScroll', (req, res) => {
+    models.getMoreMoviesOnScroll(req.body, (error, resp)=>{
+        if(error) {
+            res.send(error)
+        }
+        if(resp) {
+            res.send(resp)
+        }
+    })
+})
+router.get('/tvList', (req, res) => {
+    models.getTvList(req.body, (err, resp)=>{
         if(err){
             res.send(err)
         } else {
@@ -36,12 +55,9 @@ router.get('/getmedia', (req, res) => {
 })
 
 router.post('/uploadmedia', upload.any(), function (req, res, next) {
-    console.log(req.files)
-    models.uploadMedia({
-       location: `http://192.168.4.1:4012/${req.files[0]['filename'].replace(new RegExp(' ', 'g'), '%20')}}`,
-        size: req.files[0]['size']
-    },  (err, resp) => {
-        // console.log("REQ.BODY", req.fiies, req.body, err, resp)
+    console.log("REQ.BODY", req.files)
+    models.uploadMedia(req.files,  (err, resp) => {
+        console.log("REQ.BODY", req.fiies, req.body, err, resp)
         if(err) {
             // console.log(err)
             res.send(err)

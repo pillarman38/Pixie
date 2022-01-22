@@ -32,7 +32,7 @@ export class PhotoBoothComponent implements OnInit {
   constructor(private http: HttpClient, private photoServ: PhotoUploaderService, private webSocket: WebsocketService, private clickedMovie: ClickedMovieService, private router: Router, private photoViewServ: PhotoViewService) { }
   getExtention(filename) {
     var parts = filename.split('.');
-    return parts[parts.length - 1];
+    return filename
   }
   counter(e) {
     if(this.i != e.target.files.length){
@@ -44,56 +44,61 @@ export class PhotoBoothComponent implements OnInit {
     
     var formData = new FormData();
 
-    formData.append("photos", e.target.files[this.i]);
-    
+    for(var l = 0; l < e.target.files.length; l++) {
+      formData.append("photos", e.target.files[l]);
+    }
     var web = this.webSocket
-    var extention = this.getExtention(e.target.files[this.i]['name'])
-    console.log(extention)
-    var uploadObj = {
-      percent: 0,
-      index: this.i,
-      type: extention,
-      location: `http://192.168.4.1:4012/${e.target.files[this.i]['name'].replace(new RegExp(' ', 'g'), '%20')}`,
-      title: e.target.files[this.i]['name']
-    }
-    if(uploadObj['type'] == "png" || uploadObj['type'] == "jpeg") {
-     this.arrOfPhotos.push(uploadObj)
-    }
-    if(uploadObj['type'] == "mov" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
-      this.arrOfVideos.push(uploadObj)
-    }
-    this.http.post("http://192.168.4.1:4012/api/mov/uploadmedia", formData, {
-        reportProgress: true,
-        observe: "events"
-      }).subscribe((data) => {
-        console.log(this.i, data)
-          
-          var uploadProgress = 0
-          uploadProgress =  Math.ceil((data['loaded'] / data['total']) * 100)
-          
-          if(!isNaN(uploadProgress)) {
-            var foundPhoto = this.arrOfPhotos.find(function(post, index) {
-              if(post.title == uploadObj['title']){
-                post['percent'] = uploadProgress
+    var extention = e.target.files[this.i]['type']
+    var fileName = e.target.files[this.i]['name']
+    console.log(extention, e.target.files)
+    if(extention) {
+      var uploadObj = {
+        percent: 0,
+        index: this.i,
+        type: extention,
+        location: `http://192.168.4.1:4012/${fileName.replace(new RegExp(' ', 'g'), '%20')}`,
+        title: e.target.files[this.i]['name']
+      }
+      if(uploadObj['type'] === "image/png" || uploadObj['type'] === "image/jpeg" || uploadObj['type'] === "HEIC") {
+       this.arrOfPhotos.push(uploadObj)
+      }
+      if(uploadObj['type'] === "video/quicktime" || uploadObj['type'] === "mp4" || uploadObj['type'] === "MOV") {
+        this.arrOfVideos.push(uploadObj)
+      }
+      this.http.post("http://192.168.4.1:4012/api/mov/uploadmedia", formData, {
+          reportProgress: true,
+          observe: "events"
+        }).subscribe((data) => {
+          console.log(this.i, data, this.arrOfVideos)
+            console.log("PHOTOS AND VIDEOS ARRAY: ", this.arrOfPhotos, this.arrOfVideos, uploadObj);
+            
+            var uploadProgress = 0
+            uploadProgress =  Math.ceil((data['loaded'] / data['total']) * 100)
+            
+            if(!isNaN(uploadProgress)) {
+              var foundPhoto = this.arrOfPhotos.find(function(post, index) {
+                if(post.title == uploadObj['title']){
+                  post['percent'] = uploadProgress
+                }
+              });
+              var foundVideo = this.arrOfVideos.find(function(post, index) {
+                if(post.title == uploadObj['title']){
+                  post['percent'] = uploadProgress
+                }
+              });
+              if(uploadObj['type'] == "image/png" || uploadObj['type'] == "image/jpeg") {
+                console.log("picture")
+                web.emit("photoUpdater", this.arrOfPhotos)
               }
-            });
-            var foundVideo = this.arrOfVideos.find(function(post, index) {
-              if(post.title == uploadObj['title']){
-                post['percent'] = uploadProgress
+              if(uploadObj['type'] == "video/quicktime" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
+                console.log("video");
+                
+                web.emit("videoUpdater", this.arrOfVideos)
               }
-            });
-            if(uploadObj['type'] == "png" || uploadObj['type'] == "jpeg") {
-              console.log("picture")
-              web.emit("photoUpdater", this.arrOfPhotos)
             }
-            if(uploadObj['type'] == "mov" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
-              console.log("video");
-              
-              web.emit("videoUpdater", this.arrOfVideos)
-            }
-          }
-      })
-    this.counter(e)
+        })
+      this.counter(e)
+    }
   }
 
   photoView(e) {

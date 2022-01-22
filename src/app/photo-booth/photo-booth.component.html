@@ -9,9 +9,9 @@
         <div *ngIf="photo.percent != 100">
             <!-- <div [style.width]="photo.percent+'px'" [style.height]="10+'px'" style="background-color: green;">  </div> -->
         </div>
-        <!-- <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)"> -->
+        <!-- <img src={{photo.thumbnail}}  width="100" height="100" (click)="photoView(photo)"> -->
         <div *ngIf="photo.percent == 100">
-            <img src="{{photo.location}}"  width="100" height="100" (click)="photoView(photo)">
+            <img src="{{photo.thumbnail}}"  width="100" height="100" (click)="photoView(photo)">
         </div>
     </div>
 </div>
@@ -23,7 +23,7 @@
             <div [style.width]="photo.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> </div>
         </div>
         <div *ngIf="photo.percent == 100">
-            <img src="{{photo.location}}"  width="100" height="100" (click)="photoView(photo)">
+            <img src="{{photo.thumbnail}}"  width="100" height="100" (click)="photoView(photo)">
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
         <div *ngIf="vid.percent != 100">
             <div [style.width]="vid.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> </div>
         </div>
-        <!-- <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)"> -->
+        <!-- <img src={{photo.thumbnail}}  width="100" height="100" (click)="photoView(photo)"> -->
         <div *ngIf="vid.percent == 100">
             <p style="color: white;">{{vid.title}}</p>
         </div>
@@ -46,7 +46,7 @@
         <div *ngIf="vid.percent != 100">
             <div [style.width]="vid.percent+'px'" [style.height]="10+'px'" style="background-color: green;"> </div>
         </div>
-        <!-- <img src={{photo.location}}  width="100" height="100" (click)="photoView(photo)"> -->
+        <!-- <img src={{photo.thumbnail}}  width="100" height="100" (click)="photoView(photo)"> -->
         <div *ngIf="vid.percent == 100">
             <p style="color: white;">{{vid.title}}</p>
         </div>

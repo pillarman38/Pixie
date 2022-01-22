@@ -1,7 +1,6 @@
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../websocket.service';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 
 @Component({
   selector: 'app-copier',
@@ -43,16 +42,9 @@ export class CopierComponent implements OnInit {
     console.log(e)
     this.http.post(`http://192.168.4.1:4012/api/mov/mover`, {toMove: e}).subscribe((res: any) => {
       console.log(res);
-
     })
   }
   ngOnInit(): void {
-    var subject = webSocket('ws://192.168.4.1:4012');
-    subject.subscribe(
-      (msg) => console.log('message recieved', msg),
-      (err) => console.log(err),
-      () => console.log('complete')
-    )
     this.http.get('http://192.168.4.1:4012/api/mov/dirinfogetter').subscribe((data: any) => {
       this.filesystem = data['filesystem']
       this.usb = data['usb']

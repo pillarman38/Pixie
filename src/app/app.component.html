@@ -1,9 +1,22 @@
  
 <div class="header">
     <a routerLink="videoSelection" class="button" routerLinkActive="active">Movies</a>
-    <a routerLink="photoBooth" class="button" routerLinkActive="active">Media Pool</a>
+    <a routerLink="tvshows" class="button" routerLinkActive="active">tv shows</a>
     <a routerLink="copier" class="button" routerLinkActive="active">Disk</a>
-    <button type="button" class="button" (click)="power()">Power Off</button>
+    <a routerLink="photoBooth" class="button" routerLinkActive="active">Photos</a>
+    <div type="button" id="powerBtn" (click)="power()">Power Off</div>
+    
+        <div id="wrapper">
+            <div class="container" #progressBar>
+            <div class="progess">
+                    <div id="progressBar" >{{percentDone}}</div>
+                </div>
+            </div>
+        </div>
+    
+    
+
+    
 </div>
 
 
