@@ -17,9 +17,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   }
   ngOnInit(): void {
     this.video = this.clickedMovie.saveVideo
-    this.cast = JSON.parse(this.clickedMovie.saveVideo['cast'])
-    
-    
+    this.cast = this.clickedMovie.saveVideo['cast'] ? JSON.parse(this.clickedMovie.saveVideo['cast']) : {}
   }
   ngAfterViewInit() {
     console.log(this.cast, this.somecontent, this.clickedMovie.saveVideo['poster_path'])

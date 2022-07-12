@@ -4,6 +4,8 @@ let models = require('../models/movies.models')
 let multer = require('multer')
 
 let photoPath = "/home/pi/Desktop/Media"
+let pixieUpdater = require('../models/pixieUpdater')
+
 
 var storage = multer.diskStorage({
     destination: function(req, file, next) {

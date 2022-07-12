@@ -14,7 +14,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
 
 ngAfterViewInit() {
   console.log(this.videoPlayer);
-  this.videoPlayer.nativeElement.webkitEnterFullScreen();
+  // this.videoPlayer.nativeElement.webkitEnterFullScreen();
   
 }
 

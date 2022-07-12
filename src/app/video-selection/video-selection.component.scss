@@ -130,9 +130,9 @@
 
 .hex-brick{
     background-image: radial-gradient(circle at 50% 50%, #ff822e, #dd480d);
-    width: 30px;
-	height: 17px;
-	position: absolute;
+    width: 10px;
+	height: 5px;
+	position: fixed;
 	top: 5px;
     animation-name: fade;
 	animation-duration: 2s;
@@ -142,8 +142,9 @@
 	text-align: center;
     vertical-align: middle;
 	-webkit-animation-iteration-count: infinite;
-	z-index: -1;
+	z-index: 1;
 }
+
 			
 			.h2{
 				transform: rotate(60deg);
@@ -166,8 +167,8 @@
 			}
 			
 			.center-gel{
-				margin-left: -15px;
-				margin-top: -15px;
+				margin-left: -5px;
+				margin-top: -5px;
 				
 				animation-name: pulse;
 				animation-duration: 2s;

@@ -35,15 +35,18 @@ export class PhotoBoothComponent implements OnInit {
     return filename
   }
   counter(e) {
-    if(this.i != e.target.files.length){
-      this.i++;
+    if(this.i + 1 != e.target.files.length){
+      this.i += 1;
       this.handleDrop(e)
-    } 
+    } else {
+      console.log("DONE!");
+      
+    }
   }
   handleDrop(e) {
-    
     var formData = new FormData();
-
+    console.log("I: ", this.i);
+    
     for(var l = 0; l < e.target.files.length; l++) {
       formData.append("photos", e.target.files[l]);
     }
@@ -109,17 +112,28 @@ export class PhotoBoothComponent implements OnInit {
     this.clickedMovie.saveVideo = e
     this.router.navigateByUrl('/videoPlayer')
   }
-  ngOnInit(): void {
-    this.http.get('http://192.168.4.1:4012/api/mov/getmedia').subscribe((data) => {
+
+  getPhotos() {
+    this.http.get('http://192.168.4.1:4012/api/mov/getmedia').subscribe((data: any[]) => {
       console.log(data)
-      this.videos = data['video']
-      this.photosBefore = data['photo']
-      this.videosBefore = data['video']
-      this.photoViewServ.photosArr = data['photo']
+      this.videos = data.filter(itm => itm.type != "image/jpeg")
+      this.photosBefore = data.filter(itm => itm.type != "video/quicktime")
+      this.videosBefore = data.filter(itm => itm.type != "video/quicktime")
+      this.photoViewServ.photosArr = data.filter(itm => itm.type != "image/jpeg")
+      this.photos = data.filter(itm => itm.type != "video/quicktime")
+      console.log(this.photosBefore);
+      console.log(this.photos);
+      
     })
-    this.webSocket.listen('photoUpdate').subscribe((data: any[]) => {
+  }
+
+  ngOnInit(): void {
+    this.getPhotos()
+    this.webSocket.listen('photoUpdate').subscribe((data: []) => {
       console.log(data)
-      this.photos = data
+      this.photos = this.photosBefore.concat(data)
+
+      
     })
     this.webSocket.listen('videoUpdate').subscribe((data: any[]) => {
       console.log(data)
@@ -127,14 +141,14 @@ export class PhotoBoothComponent implements OnInit {
     })
     this.webSocket.listen('test event').subscribe((data: any[]) => {
       console.log(data)
-      this.videos = data['video']
-      this.photos = data['photo']
+      this.videos = data.filter(itm => itm.type != "video/quicktime")
+      this.photos = data.filter(itm => itm.type != "image/jpeg")
       console.log(this.videos, this.photos)
     })
     this.webSocket.message('message').subscribe((data: any[]) => {
       console.log(data)
-      this.videos = data['video']
-      this.photos = data['photo']
+      this.videos = data.filter(itm => itm.type != "video/quicktime")
+      this.photos = data.filter(itm => itm.type != "image/jpeg")
       console.log(this.videos, this.photos)
     })
   }

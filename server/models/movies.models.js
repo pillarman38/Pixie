@@ -16,11 +16,11 @@ var fse = require('fs-extra')
 // var server = require('http').Server(serverFile.app)
 // var io = require('socket.io')(server)
 var { spawn } = require('child_process')
-var request = require('request')
-var ws = new WebSocket(`ws://192.168.4.1:4013`)
-var wss = new WebSocket.Server({
-    port: 4013
-})
+var fetch = require('node-fetch')
+// var ws = new WebSocket(`wsz://192.168.4.1:4013`)
+// var wss = new WebSocket.Server({
+//     port: 4013
+// })
 
 let routeFunctions = {
     getMovieList: (req, callback) => {
@@ -40,32 +40,39 @@ let routeFunctions = {
             var filteredArr = arrToFilterWith.filter(function(e) {
                 return this.indexOf(e) < 0;
             }, resToFilterWith)
-            console.log("FILTERED ARR", filteredArr);
+            console.log("FILTERED ARR with movies not in pixie:", filteredArr);
             var i = 0
 
-            function iterate(movie) {
-                console.log(movie);
+            async function iterate() {
+                var movie = filteredArr[i]
+                // console.log(movie);
+                if(movie) {
+                var info = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=490cd30bbbd167dd3eb65511a8bf2328&query=${movie.replace(new RegExp(' ', 'g'), '%20')}`)
+                var body = await info.json()
+                // console.log(body);
                 
-                request(`https://api.themoviedb.org/3/search/movie?api_key=490cd30bbbd167dd3eb65511a8bf2328&query=${movie.replace(new RegExp(' ', 'g'), '%20')}`, {json: true}, (err, res, body) => {
-                    if(err) {console.log(err)}
-                    console.log("BODY: ", body['results'], movie, `https://api.themoviedb.org/3/search/movie?api_key=490cd30bbbd167dd3eb65511a8bf2328&query=${movie.replace(new RegExp(' ', 'g'), '%20')}`);
-                    console.log("BODYY: ", body);
+                    // console.log("BODY: ", body['results'], movie, `https://api.themoviedb.org/3/search/movie?api_key=490cd30bbbd167dd3eb65511a8bf2328&query=${movie.replace(new RegExp(' ', 'g'), '%20')}`);
+                    // console.log("BODYY: ", body);
                     
-                    if(body != undefined) {
-                        var download = function(uri, filename, callback) {
-                            request.head(uri, function(err, res, body) {
-                                request(uri).pipe(fs.createWriteStream(filename)).on('close', callback)
-                            })
+                    if(await body != undefined) {
+                        var download = async function(uri, filename) {
+                            // request.head(uri, function(err, res, body) {
+                                let stuff = await fetch(uri)
+                                await stuff.body.pipe(fs.createWriteStream(filename))
+                            // })
+                            // console.log("DOWNLOADED!!!!");
+                            
                         }
+                        if(body['results'].length > 0) {
+                            download(`https://image.tmdb.org/t/p/w500${body['results'][0]['backdrop_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['backdrop_path']}`)
+                            download(`https://image.tmdb.org/t/p/w500${body['results'][0]['poster_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['poster_path']}`)
+                        
+                        var bod = await fetch(`https://api.themoviedb.org/3/movie/${body['results'][0]['id']}/credits?api_key=490cd30bbbd167dd3eb65511a8bf2328&language=en-US`)
+                        var bodyTwo = await bod.json()
 
-                        download(`https://image.tmdb.org/t/p/w500${body['results'][0]['backdrop_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['backdrop_path']}`, function(){
-                            console.log("done", body['results'][0]['backdrop_path'])
-                        }) 
-                        download(`https://image.tmdb.org/t/p/w500${body['results'][0]['poster_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['poster_path']}`, function(){
-                            console.log("done", body['results'][0]['poster_path'])
-                        })
-                    
-                        request(`https://api.themoviedb.org/3/movie/${body['results'][0]['id']}/credits?api_key=490cd30bbbd167dd3eb65511a8bf2328&language=en-US`, { json: true }, (error, resp, bodyTwo) => {
+                            if(await bodyTwo) {
+                                // console.log("HOWWWWWWWWWW", bodyTwo['results'], body['results']);
+                                
                             var cast = {
                                 acting: bodyTwo['cast'].map(itm => {
                                         return {
@@ -77,48 +84,152 @@ let routeFunctions = {
                                     if(itm['job'] == "Director") {
                                         return itm
                                     }
-                                }, movie)[0]['name']
+                                }, movie)
                             }
-                            console.log(cast);
-                            if(body['results'][0]['backdrop_path'] != null) {
+                        
+                            if(body['results'][0] != null) {
                                 var finalObj = {
                                     title: movie,
                                     cast: JSON.stringify(cast),
                                     overview: body['results'][0]['overview'],
-                                    backdrop_path: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['poster_path'].replace("/", "")}`,
-                                    poster_path: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['backdrop_path'].replace("/", "")}`,
-                                    movieLocation: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.m4v`
+                                    backdrop_path: body['results'][0]['poster_path'] ? `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['poster_path'].replace("/", "")}` : 'http://192.168.4.1:4012/404-50x70_3a189.jpg', 
+                                    poster_path: body['results'][0]['backdrop_path'] ? `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['backdrop_path'].replace("/", "")}` : 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                                    movieLocation: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
                                 }
-                                console.log(finalObj)
+                                // console.log("FINAL OBJ: ", finalObj)
+                                pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
+                                    console.log(err, resp);
+                                })
+                            } else {
+                                var finalObj = {
+                                    title: movie,
+                                    cast: JSON.stringify(cast),
+                                    overview: '',
+                                    backdrop_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                                    poster_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                                    movieLocation: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                                }
+                                // console.log("FINAL OBJ: ", finalObj)
                                 pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
                                     console.log(err, resp);
                                 })
                             }
-                        })
                     }
-                })
-                console.log(i,arrToFilterWith.length, filteredArr.length);
+                }else {
+                    var finalObj = {
+                        title: movie,
+                        cast: cast ? cast : '',
+                        overview: '',
+                        backdrop_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                        poster_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                        movieLocation: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                    }
+                    // console.log("FINAL OBJ: ", finalObj)
+                    pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
+                        // console.log(err, resp);
+                    })
+                    
+                }
+                console.log(i+1,filteredArr.length);
                 
                 if(i + 1 != filteredArr.length) {
                     i += 1
-                    iterate(filteredArr[i])
-                } 
-            }
-            console.log(filteredArr);
-            if(filteredArr.length !== 0) {
-                iterate(filteredArr[i])
-            } else {
-                pool.query(`SELECT * FROM movieInfo LIMIT 50`, (err, res) => {
-                    callback(res)
-                })
-            }
+                    iterate()
+                } else {
+                    pool.query(`SELECT * FROM movieInfo`, (error, response) => {
+                        if(callback) {
+                            callback(response)
+                        }
+                    })
+                }
+            } 
+        } else {
+            pool.query(`SELECT * FROM movieInfo LIMIT 50`, (error, response) => {
+                callback(response)
             })
-        },
+        }
+        }
+        iterate()
+    }
+)},
+
+        updateMoviesForPixe: async (movie) => {
+            var info = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=490cd30bbbd167dd3eb65511a8bf2328&query=${movie.replace(new RegExp(' ', 'g'), '%20')}`)
+            var body = await info.json()
+            // console.log(body);
+            
+            var download = async function(uri, filename) {
+                let stuff = await fetch(uri)
+                await stuff.body.pipe(fs.createWriteStream(filename))
+                                    // })
+                console.log("DOWNLOADED!!!!");          
+            }
+                            
+            if(body['results'].length > 0) {
+                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['backdrop_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['backdrop_path']}`)
+                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['poster_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['poster_path']}`)
+                            
+                var bod = await fetch(`https://api.themoviedb.org/3/movie/${body['results'][0]['id']}/credits?api_key=490cd30bbbd167dd3eb65511a8bf2328&language=en-US`)
+                var bodyTwo = await bod.json()
+    
+                if(await bodyTwo) {
+                    // console.log("HOWWWWWWWWWW", bodyTwo['results'], body['results']);
+                                    
+                    var cast = {
+                        acting: bodyTwo['cast'].map(itm => {
+                            return {
+                                    name: itm['name'],
+                                    character: itm['character']
+                                }
+                            }, movie),
+                        directing: bodyTwo['crew'].filter(itm => {
+                                    if(itm['job'] == "Director") {
+                                        return itm
+                                    }
+                                }, movie)
+                            }
+                        // } else {
+                            
+                            console.log(body['results'][0]['overview']);
+                            // if(body['results'][0]['backdrop_path'] != null) {
+                                var finalObj = {
+                                    title: movie,
+                                    cast: '',
+                                    overview: body['results'][0]['overview'] ?? '',
+                                    backdrop_path: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['poster_path'].replace("/", "")}` ?? 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                                    poster_path: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['poster_path'].replace("/", "")}` ?? 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                                    movieLocation: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                                }
+                                // console.log("FINAL OBJ: ", finalObj)
+                                pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
+                                    console.log(err, resp);
+                                })
+
+                        }
+                        } else {
+                            var finalObj = {
+                                title: movie,
+                                cast: '',
+                                overview: '',
+                                backdrop_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                                poster_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
+                                movieLocation: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                            }
+                            // console.log("FINAL OBJ: ", finalObj)
+                            pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
+                                console.log(err, resp);
+                            })
+                        }
+
+                        
+                
+    },
+
         getMoreMoviesOnScroll: (selectionToUpdate, callback) => {
             console.log(selectionToUpdate);
             
             pool.query(`SELECT * FROM movieInfo WHERE id > '${selectionToUpdate.id}' LIMIT 50`, (err, res)=>{
-                console.log(err, res);
+                // console.log(err, res);
                 callback(err, res)
             })
         },
@@ -186,11 +297,11 @@ let routeFunctions = {
                                         overview: body['results'][0]['overview'],
                                         backdrop_path: `http://192.168.4.1:4012/${tv.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['poster_path'].replace("/", "")}`,
                                         poster_path: `http://192.168.4.1:4012/${tv.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['backdrop_path'].replace("/", "")}`,
-                                        movieLocation: `http://192.168.4.1:4012/${tv.replace(new RegExp(" ", "g"), "%20")}/${tv.replace(new RegExp(" ", "g"), "%20")}.m4v`
+                                        movieLocation: `http://192.168.4.1:4012/${tv.replace(new RegExp(" ", "g"), "%20")}/${tv.replace(new RegExp(" ", "g"), "%20")}.mp4`
                                     }
-                                    // console.log(finalObj)
+                                    console.log(finalObj)
                                     pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
-                                        // console.log(err, resp);
+                                        console.log(err, resp);
                                     })
                                 }
                             })
@@ -222,39 +333,19 @@ let routeFunctions = {
             video: [],
             photo: []
         }
-        fs.readdir("/home/pi/Desktop/Media", (err, files) => {
-
-            for(var i = 0; i < files.length; i++) {
-            if(path.extname(`/home/pi/Desktop/Media/${files[i]}`) == ".png" || path.extname(`/home/pi/Desktop/Media/${files[i]}`) == ".PNG" || path.extname(`/home/pi/Desktop/Media/${files[i]}`) == ".jpg" || path.extname(`/home/pi/Desktop/Media/${files[i]}`) == ".jpeg") { 
-                uri = {
-                    location: `http://192.168.4.1:4012/${files[i].replace(new RegExp(' ', 'g'), "%20")}`,
-                    title: files[i],
-                    percent: 100
-                }
-                    updaterObj['photo'].push(uri)
-                }
-                if(path.extname(`/home/pi/Desktop/Media/${files[i]}`) == ".mp4" || path.extname(`/home/pi/Desktop/Media/${files[i]}`) == ".MOV") {
-                    uri = {
-                        location: `http://192.168.4.1:4012/${files[i].replace(new RegExp(' ', 'g'), "%20")}`,
-                        title: files[i],
-                        percent: 100
-                    }
-                    updaterObj['video'].push(uri)
-                } 
-                if(files.length - 1 === i) {
-                    callback(updaterObj)
-                    
-                }
+        
+        pool.query('SELECT * FROM photos', (error, resp) =>{
+            for(var i = 0; i < resp.length; i++) {
+                resp[i]['percent'] = 100
             }
+            callback(error, resp)
         })
     },
-    uploadMedia: async (files, callback) => {
+    uploadMedia: (files, callback) => {
         var filesize = files['size']
-        console.log("INFO", files, filesize)
-
-        for(var i = 0; i < files.length; i++) {
-                var newJob = function() {
-                    console.log("MADE IUT", files[i]);
+        var i = 0
+        function iterator() {
+                var newJob = async function() {
                     var extensionRepalcer = undefined
 
                     switch(files[i]['mimetype']) {
@@ -268,8 +359,6 @@ let routeFunctions = {
                         //     extensionRepalcer = files[i]['filename'].substr(0, files[i]['filename'].lastIndexOf(".")) + "_thumb.heic"
                     }
                     
-                    console.log("REPALCER: ", extensionRepalcer);
-                    
                     var newProc = exec(`ffmpeg -i '/home/pi/Desktop/Media/${files[i]['filename']}' -vf scale=200:-1 /home/pi/Desktop/Media/${extensionRepalcer}`)
                     newProc.on('error', function(err) {
                         console.log("hi", err);
@@ -281,27 +370,38 @@ let routeFunctions = {
                         console.log("hello", data);
                     })
                     newProc.on('close', function(close) {
-                        console.log("why", close);
+                        console.log("why", close, i, files.length);
+                        
+                        var addedMedia = {
+                            location: `http://192.168.4.1:4012/${files[i]['filename'].replace(new RegExp(' ', 'g'), '%20')}`,
+                            thumbnail: `http://192.168.4.1:4012/${extensionRepalcer}`,
+                            type: files[i]['mimetype']
+                        }
+                        
+                        pool.query('INSERT INTO `photos` SET ?', addedMedia, (error, resp) =>{
+                            console.log("III: ", error, resp);
+        
+                        })
+                        
+                        if(i + 1 != files.length) {
+                            i += 1
+                            console.log(i, files.length);
+                            iterator()
+                        } else {
+                            console.log("Done!");
+                            pool.query('SELECT * FROM photos', (error, resp) =>{
+                                callback(error, resp)
+                            })
+                        }
                     })
-                    var addedMedia = {
-                        location: `http://192.168.4.1:4012/${files[i]['filename'].replace(new RegExp(' ', 'g'), '%20')}`,
-                        thumbnail: `http://192.168.4.1:4012/${extensionRepalcer}`,
-                        type: files[i]['mimetype']
-                    }
                     
-                    pool.query('INSERT INTO `photos` SET ?', addedMedia, (error, resp) =>{
-                        console.log("III: ", i, files.length);
-    
-                    })
                 }
-                await newJob()
+                newJob()
 
-            await console.log("done");
-            pool.query('SELECT * FROM photos', addedMedia, (error, resp) =>{
-                callback(error, resp)
-            })
+            
             
             }
+            iterator()
     },
     powerOff: (req, callback) => {
         var newProc = exec('sudo shutdown now')

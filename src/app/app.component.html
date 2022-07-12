@@ -1,25 +1,45 @@
  
 <div class="header">
-    <a routerLink="videoSelection" class="button" routerLinkActive="active">Movies</a>
-    <a routerLink="tvshows" class="button" routerLinkActive="active">tv shows</a>
-    <a routerLink="copier" class="button" routerLinkActive="active">Disk</a>
-    <a routerLink="photoBooth" class="button" routerLinkActive="active">Photos</a>
-    <div type="button" id="powerBtn" (click)="power()">Power Off</div>
-    
-        <div id="wrapper">
-            <div class="container" #progressBar>
-            <div class="progess">
-                    <div id="progressBar" >{{percentDone}}</div>
+    <div *ngIf="showsUI">
+        <a routerLink="videoSelection" class="button" routerLinkActive="active">Movies</a>
+        <a routerLink="tvshows" class="button" routerLinkActive="active">tv shows</a>
+        <a routerLink="copier" class="button" routerLinkActive="active">Disk</a>
+        <a routerLink="photoBooth" class="button" routerLinkActive="active">Photos</a>
+    </div>
+
+    <div *ngIf="isSyncing">
+        <div *ngIf="!isDownloading">
+        <div id="powerBtnSync">
+        <div id="progressBar" style="width: {{syncingMovie.percentage}}%">
+                {{syncingMovie.percentage}}
+            </div>
+            {{syncingMovie.title}}
+        </div>
+            </div>
+            <div *ngIf="isDownloading">
+                <div id="powerBtnDownload">
+                    <p>Downloading {{syncingMovie.title}}</p>
                 </div>
             </div>
-        </div>
-    
-    
+    </div>
 
     
+    
+    <div *ngIf="!isSyncing">
+        <div id="powerBtn">
+            <div type="button" (click)="power()">{{powerMsgs}}</div>
+        </div>
+    </div>
+    
+        <div id="wrapper">
+            <div class="container">
+            <!-- <div class="progess">
+                    <div id="progressBar" >{{percentDone}}</div>
+                </div> -->
+            </div>
 </div>
 
-
-<div id="outlet">
+</div>
+<div id="outlet" *ngIf="showsUI">
     <router-outlet></router-outlet>
 </div>

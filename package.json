@@ -40,9 +40,9 @@
     "npm": "^7.24.1",
     "request": "^2.88.2",
     "rxjs": "~6.5.5",
-    "socket.io": "^2.4.1",
     "socket.io-client": "^2.4.0",
     "tslib": "^2.0.0",
+    "websocket": "^1.0.34",
     "ws": "^7.5.0",
     "zone.js": "~0.11.4"
   },

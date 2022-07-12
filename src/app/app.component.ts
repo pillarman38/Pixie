@@ -13,33 +13,66 @@ export class AppComponent implements OnInit {
   hotspotornot = true
   percentDone
   progressIsDone = false
+  powerMsgs = "Power off"
+  showsUI = true
   @ViewChild('progressBar') progressBAr: ElementRef;
-
+  isSyncing = false
+  isDownloading = false
+  syncingMovie = {
+    backOrFront: 'frontend',
+    title: undefined,
+    percentage: undefined
+  }
   constructor(private router: Router, private http: HttpClient) { }
   
   power(){
+    this.powerMsgs = "Off"
+    this.showsUI = false
     this.http.get('http://192.168.4.1:4012/api/mov/power').subscribe((res: any[]) => {
       console.log(res)
     })
   }
   ngOnInit() {
+    const subject = webSocket('ws://192.168.0.153:4444');
+
+    subject.next(this.syncingMovie);
+    subject.subscribe({
+      next: (msg: any) => {
+        this.isSyncing = true
+        console.log(msg)
+        this.syncingMovie = {
+          backOrFront: 'frontend',
+          title: msg.video,
+          percentage: Math.floor(msg.percentDone)
+        }
+        if(msg.type === 'Syncing') {
+          this.isSyncing = true
+          this.isDownloading = false
+        }
+        if(msg.type === 'Downloading') {
+          this.isSyncing = true
+          this.isDownloading = true
+        }
+        if(msg.type === "Syncing complete") {
+          this.isSyncing = false
+          this.isDownloading = false
+        }
+        if(msg.type === "Movie finished transcoding") {
+          this.isSyncing = true
+          this.isDownloading = true
+        }
+        if(!msg.percentDone) {
+          this.isSyncing = false
+          this.isDownloading = false
+        }
+        
+      }, // Called whenever there is a message from the server.
+      error: err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
+      complete: () => console.log('complete') // Called when connection is closed (for whatever reason).
+     });
     // this.http.get('http://192.168.4.1:4012/api/mov/overviewupdate').subscribe((res) => {
     //   console.log(res);
     // })
-    let subject = webSocket(`ws://192.168.4.1:4013`)
-
-    subject.subscribe((msg) => {
-      console.log(msg);
-      this.percentDone = msg
-      this.progressBAr.nativeElement.style.width = msg
-      if(this.percentDone == "100%") {
-        this.percentDone = "done!"
-        setTimeout(()=>{
-          this.percentDone = ""
-          this.progressBAr.nativeElement.style.width = "0%"
-        }, 1000)
-      }
-    })
     this.router.navigateByUrl('/videoSelection')
   }
 }
