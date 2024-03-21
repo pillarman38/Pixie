@@ -13,6 +13,8 @@ import { CopierComponent } from './copier/copier.component';
 import { OverviewComponent } from './overview/overview.component';
 import { TvShowsComponent } from './tv-shows/tv-shows.component';
 import { HomeVideosComponent } from './home-videos/home-videos.component';
+import { SeasonSelectionComponent } from './season-selection/season-selection.component';
+import { SearchComponent } from './search/search.component';
 
 const appRoutes = [
   {path: 'videoPlayer', component: VideoPlayerComponent},
@@ -21,7 +23,10 @@ const appRoutes = [
   {path: 'photoViewer', component: PhotoViewerComponent},
   {path: "copier", component: CopierComponent},
   {path: "overview", component: OverviewComponent},
-  {path: "homeVideos", component: HomeVideosComponent}
+  {path: "homeVideos", component: HomeVideosComponent},
+  {path: "tvshows", component: TvShowsComponent},
+  {path: "seasonSelection", component: SeasonSelectionComponent},
+  {path: "search", component: SearchComponent}
 ]
 
 @NgModule({
@@ -34,7 +39,9 @@ const appRoutes = [
     CopierComponent,
     OverviewComponent,
     TvShowsComponent,
-    HomeVideosComponent
+    HomeVideosComponent,
+    SeasonSelectionComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,10 @@
+<div id="search">
+    <input type="text" height="100" id="searchBar" #searchBar (keypress)="onKeypressEvent($event)">
+
+    <div id="results">
+        <div *ngFor="let res of results" (click)="selected(res)" class="results">
+            <img src="{{res.backdrop_path}}" class="posters">
+            <p>{{res.title}}</p>
+        </div>
+    </div>
+</div>

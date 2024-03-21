@@ -3,9 +3,10 @@
     <div *ngIf="showsUI">
         <a routerLink="videoSelection" class="button" routerLinkActive="active">Movies</a>
         <a routerLink="tvshows" class="button" routerLinkActive="active">tv shows</a>
-        <a routerLink="copier" class="button" routerLinkActive="active">Disk</a>
-        <a routerLink="photoBooth" class="button" routerLinkActive="active">Photos</a>
+        <!-- <a routerLink="copier" class="button" routerLinkActive="active">Disk</a> -->
+        <!-- <a routerLink="photoBooth" class="button" routerLinkActive="active">Photos</a> -->
     </div>
+
 
     <div *ngIf="isSyncing">
         <div *ngIf="!isDownloading">
@@ -22,8 +23,6 @@
                 </div>
             </div>
     </div>
-
-    
     
     <div *ngIf="!isSyncing">
         <div id="powerBtn">
@@ -31,15 +30,11 @@
         </div>
     </div>
     
-        <div id="wrapper">
-            <div class="container">
-            <!-- <div class="progess">
-                    <div id="progressBar" >{{percentDone}}</div>
-                </div> -->
-            </div>
+        
+<img id="pixie" src="../assets/pixel.png">
 </div>
 
-</div>
+
 <div id="outlet" *ngIf="showsUI">
     <router-outlet></router-outlet>
 </div>

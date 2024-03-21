@@ -22,10 +22,11 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     console.log(this.cast, this.somecontent, this.clickedMovie.saveVideo['poster_path'])
     this.somecontent.nativeElement.style.backgroundImage = `url('${this.clickedMovie.saveVideo['poster_path']}')`
-    this.somecontent.nativeElement.style.backgroundSize = "100vw"
+    this.somecontent.nativeElement.style.backgroundSize = "cover"
     this.somecontent.nativeElement.style.backgroundRepeat = "no-repeat"
     this.somecontent.nativeElement.style.zIndex = "-20"
     this.somecontent.nativeElement.style.position = 'absolute'
+    this.somecontent.nativeElement.style.backgroundAttachment = "fixed"
     window.scrollTo(0,0)
   }
 }

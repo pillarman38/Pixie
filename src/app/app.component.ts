@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
 import{ Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { webSocket } from 'rxjs/webSocket'
+import { WebsocketService } from './websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
   powerMsgs = "Power off"
   showsUI = true
   @ViewChild('progressBar') progressBAr: ElementRef;
+  @ViewChild('searchBar') searchBar: ElementRef;
   isSyncing = false
   isDownloading = false
   syncingMovie = {
@@ -23,7 +25,7 @@ export class AppComponent implements OnInit {
     title: undefined,
     percentage: undefined
   }
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private trigger: WebsocketService) { }
   
   power(){
     this.powerMsgs = "Off"
@@ -32,17 +34,18 @@ export class AppComponent implements OnInit {
       console.log(res)
     })
   }
-  ngOnInit() {
-    const subject = webSocket('ws://192.168.0.153:4444');
 
-    subject.next(this.syncingMovie);
+  ngOnInit() {
+    const subject = webSocket('ws://192.168.4.1:4015');
+
+    // this.subject.message(JSON.stringify(this.syncingMovie));
     subject.subscribe({
       next: (msg: any) => {
         this.isSyncing = true
         console.log(msg)
         this.syncingMovie = {
           backOrFront: 'frontend',
-          title: msg.video,
+          title: msg.title,
           percentage: Math.floor(msg.percentDone)
         }
         if(msg.type === 'Syncing') {
@@ -52,6 +55,11 @@ export class AppComponent implements OnInit {
         if(msg.type === 'Downloading') {
           this.isSyncing = true
           this.isDownloading = true
+        }
+        if(msg.type === 'Downloading' && this.syncingMovie.percentage === 100) {
+          this.isSyncing = false
+          this.isDownloading = false
+          this.trigger.triggerMovieRequest.next('trigger')
         }
         if(msg.type === "Syncing complete") {
           this.isSyncing = false

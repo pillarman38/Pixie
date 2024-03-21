@@ -1,0 +1,114 @@
+#container {
+    margin-top: 50px;
+    height: 100%;
+    width: 100%;
+}
+p {
+    color: white;
+}
+#seasonSelector {
+    width: 250px;
+    border-radius: 10px;
+    height: 50px;
+    background-color: rebeccapurple;
+    /* margin-left: 50px; */
+    display: inline-block;
+    /* float: left; */
+    background-color: rgba(255, 38, 0, 0.707);
+    /* width: 20%; */
+    /* height: 50px; */
+    /* top: 0; */
+    /* line-height: 50px; */
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#in {
+    
+    width: 100px;
+    height: 30px;
+    overflow: hidden;
+}
+.episodes {
+    width: 250px;
+    height: 200px;
+}
+#episodes {
+    position: absolute;
+    height: 600px;
+    overflow: scroll;
+    width: 300px;
+}
+.episodePhotos {
+    max-height:100%; 
+    max-width:100%;
+}
+#seasonSelectorDiv {
+    /* position: absolute; */
+}
+#backdrop {
+    width: 170px;
+    margin: 10px;
+    float: left;
+}
+#background {
+    height: 100%;
+    width: 100%;
+}
+#cover {
+    height: 100%
+}
+#coverArt {
+    width: 150px;
+    height: 250px;
+}
+#stack {
+    position: absolute;
+    width: 200px;
+    top: 0;
+    left: 0
+}
+
+.icon-play {
+    position: absolute;
+    font-size: 1.5em;
+    left: 52%;
+    top: 50%;
+    transform: translate(-48%, -50%);
+    transition: all 70ms;
+    color: #ffffff;
+  }
+  .button {
+	background-image: radial-gradient(circle at 50% 50%, #ff822e, #dd480d);
+	width: 150px;
+    height: 50px;
+    
+	line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    color: #fff;
+    cursor: pointer;
+	border-radius: 5px;
+	box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
+}
+#grade {
+    background-image: linear-gradient(360deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.75) 48%, rgba(0,0,0,0.73) 100%);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+#info {
+    position: relative;
+    top: 0;
+    height: 50vw;
+    z-index: 0;
+}
+#plot {
+    margin-top: 10px;
+    width: 30%;
+    float: left;
+    height: 250px;
+    overflow: hidden;
+}

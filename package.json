@@ -24,6 +24,7 @@
     "@angular/router": "^12.0.5",
     "@types/socket.io": "^2.1.13",
     "@types/socket.io-client": "^1.4.35",
+    "angular-websocket": "^2.0.1",
     "chokidar": "^3.5.1",
     "concurrently": "^5.3.0",
     "core-js": "^3.14.0",
@@ -43,7 +44,7 @@
     "socket.io-client": "^2.4.0",
     "tslib": "^2.0.0",
     "websocket": "^1.0.34",
-    "ws": "^7.5.0",
+    "ws": "^7.5.9",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

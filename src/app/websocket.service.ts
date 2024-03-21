@@ -1,43 +1,16 @@
 import { Injectable } from '@angular/core';
-import * as io from 'socket.io-client';
-import { Observable } from 'rxjs';
+
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
 
+  triggerMovieRequest = new Subject();
   socket: any;
-  uri = "http://192.168.4.1:4013"
+  uri = "ws://localhost:4015"
 
-  constructor() { 
-    this.socket = io(this.uri)
-  }
+  constructor() {}
 
-  message(eventName: string) {
-    return new Observable((subscriber) => {
-      this.socket.on(eventName, (data) =>{
-        console.log(eventName,data)
-        subscriber.next(data)
-      })
-    })
-  }
-  
-  listen(eventName: string) {
-    return new Observable((subscriber) => {
-      this.socket.on(eventName, (data) =>{
-        console.log(eventName,data)
-        subscriber.next(data)
-      })
-    })
-  }
-  emit(eventName, data) {
-    console.log(this.socket)
-    this.socket.emit(eventName, data);
-  }
-  emitToServer(eventName, data) {
-    console.log(this.socket)
-      this.socket.emit(eventName, data);
-
-  }
 }

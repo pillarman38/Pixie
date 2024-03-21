@@ -72,33 +72,33 @@ export class PhotoBoothComponent implements OnInit {
           reportProgress: true,
           observe: "events"
         }).subscribe((data) => {
-          console.log(this.i, data, this.arrOfVideos)
-            console.log("PHOTOS AND VIDEOS ARRAY: ", this.arrOfPhotos, this.arrOfVideos, uploadObj);
+          // console.log(this.i, data, this.arrOfVideos)
+          //   console.log("PHOTOS AND VIDEOS ARRAY: ", this.arrOfPhotos, this.arrOfVideos, uploadObj);
             
-            var uploadProgress = 0
-            uploadProgress =  Math.ceil((data['loaded'] / data['total']) * 100)
+          //   var uploadProgress = 0
+          //   uploadProgress =  Math.ceil((data['loaded'] / data['total']) * 100)
             
-            if(!isNaN(uploadProgress)) {
-              var foundPhoto = this.arrOfPhotos.find(function(post, index) {
-                if(post.title == uploadObj['title']){
-                  post['percent'] = uploadProgress
-                }
-              });
-              var foundVideo = this.arrOfVideos.find(function(post, index) {
-                if(post.title == uploadObj['title']){
-                  post['percent'] = uploadProgress
-                }
-              });
-              if(uploadObj['type'] == "image/png" || uploadObj['type'] == "image/jpeg") {
-                console.log("picture")
-                web.emit("photoUpdater", this.arrOfPhotos)
-              }
-              if(uploadObj['type'] == "video/quicktime" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
-                console.log("video");
+          //   if(!isNaN(uploadProgress)) {
+          //     var foundPhoto = this.arrOfPhotos.find(function(post, index) {
+          //       if(post.title == uploadObj['title']){
+          //         post['percent'] = uploadProgress
+          //       }
+          //     });
+          //     var foundVideo = this.arrOfVideos.find(function(post, index) {
+          //       if(post.title == uploadObj['title']){
+          //         post['percent'] = uploadProgress
+          //       }
+          //     });
+          //     if(uploadObj['type'] == "image/png" || uploadObj['type'] == "image/jpeg") {
+          //       console.log("picture")
+          //       web.emit("photoUpdater", this.arrOfPhotos)
+          //     }
+          //     if(uploadObj['type'] == "video/quicktime" || uploadObj['type'] == "mp4" || uploadObj['type'] == "MOV") {
+          //       console.log("video");
                 
-                web.emit("videoUpdater", this.arrOfVideos)
-              }
-            }
+          //       web.emit("videoUpdater", this.arrOfVideos)
+          //     }
+          //   }
         })
       this.counter(e)
     }
@@ -128,28 +128,28 @@ export class PhotoBoothComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPhotos()
-    this.webSocket.listen('photoUpdate').subscribe((data: []) => {
-      console.log(data)
-      this.photos = this.photosBefore.concat(data)
+  //   this.getPhotos()
+  //   this.webSocket.listen('photoUpdate').subscribe((data: []) => {
+  //     console.log(data)
+  //     this.photos = this.photosBefore.concat(data)
 
       
-    })
-    this.webSocket.listen('videoUpdate').subscribe((data: any[]) => {
-      console.log(data)
-      this.videos = data
-    })
-    this.webSocket.listen('test event').subscribe((data: any[]) => {
-      console.log(data)
-      this.videos = data.filter(itm => itm.type != "video/quicktime")
-      this.photos = data.filter(itm => itm.type != "image/jpeg")
-      console.log(this.videos, this.photos)
-    })
-    this.webSocket.message('message').subscribe((data: any[]) => {
-      console.log(data)
-      this.videos = data.filter(itm => itm.type != "video/quicktime")
-      this.photos = data.filter(itm => itm.type != "image/jpeg")
-      console.log(this.videos, this.photos)
-    })
+  //   })
+  //   this.webSocket.listen('videoUpdate').subscribe((data: any[]) => {
+  //     console.log(data)
+  //     this.videos = data
+  //   })
+  //   this.webSocket.listen('test event').subscribe((data: any[]) => {
+  //     console.log(data)
+  //     this.videos = data.filter(itm => itm.type != "video/quicktime")
+  //     this.photos = data.filter(itm => itm.type != "image/jpeg")
+  //     console.log(this.videos, this.photos)
+  //   })
+  //   this.webSocket.message('message').subscribe((data: any[]) => {
+  //     console.log(data)
+  //     this.videos = data.filter(itm => itm.type != "video/quicktime")
+  //     this.photos = data.filter(itm => itm.type != "image/jpeg")
+  //     console.log(this.videos, this.photos)
+  //   })
   }
 }

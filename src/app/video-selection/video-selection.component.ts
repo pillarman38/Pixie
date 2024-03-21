@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ClickedMovieService } from '../clicked-movie.service';
 import { Router } from '@angular/router';
+import { WebsocketService } from '../websocket.service';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 
 export class VideoSelectionComponent implements OnInit {
 
-  constructor(private http:HttpClient, private clickedMovie: ClickedMovieService, private router: Router) { }
+  constructor(private http:HttpClient, private clickedMovie: ClickedMovieService, private router: Router, private trigger: WebsocketService) { }
   selection;
   isLoading = false;
   @HostListener('window:scroll', ['$event'])
@@ -46,11 +47,19 @@ export class VideoSelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
     this.http.get('http://192.168.4.1:4012/api/mov/movieListOnStartup').subscribe((res: any[]) => {
       console.log(res)
       this.selection = res
+    })
+    this.trigger.triggerMovieRequest.subscribe((res)=> {
+      console.log(res);
+      
+      if(res === 'trigger') {
+        this.http.get('http://192.168.4.1:4012/api/mov/movieListOnStartup').subscribe((res: any[]) => {
+          console.log(res)
+          this.selection = res
+        })
+      }
     })
   }
 }

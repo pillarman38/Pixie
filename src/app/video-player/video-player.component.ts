@@ -15,12 +15,10 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
 ngAfterViewInit() {
   console.log(this.videoPlayer);
   // this.videoPlayer.nativeElement.webkitEnterFullScreen();
-  
 }
 
   ngOnInit(): void {
-    this.video = this.clickedMovie.saveVideo['movieLocation']
+    this.video = this.clickedMovie.saveVideo['location']
     console.log(this.video)
   }
-
 }

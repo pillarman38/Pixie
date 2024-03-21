@@ -1,0 +1,30 @@
+<div id="container" #container>
+    <div #somecontent id="background">
+        <div id="grade">
+            <div id="info">
+                <div id="backdrop">
+                    <div id="coverArt">
+                        <img src="{{show.coverArt}}" id="cover">
+                    </div>
+                </div>
+                <div id="in">
+                    <p>{{show.title}}</p>
+                </div>
+                <div id="plot">
+                    <p>{{show.overview}}</p>
+                </div>
+            </div>
+            <div id="seasonSelectorDiv">
+                <select name="seasonSelector" (change)="onSeasonChange($event)" id="seasonSelector">
+                    <option *ngFor="let season of seasonNumbers" value="{{season}}">{{season}}</option>
+                </select>
+            </div>
+            <div id="episodes">
+                <div class="episodes" *ngFor="let episode of episodes" (click)="selectedEpisode(episode)">
+                    <img src="{{episode.backdropPhotoUrl}}" (error)="$event.target.src = '../../assets/images/image_not_available.png'" class="episodePhotos">
+                    <p>{{episode.epTitle}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
