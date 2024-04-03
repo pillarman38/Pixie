@@ -47,7 +47,7 @@ export class SeasonSelectionComponent implements OnInit, AfterViewInit {
     this.show = this.clickedMovie.saveVideo
     console.log(this.show);
 
-    this.http.post(`http://192.168.4.1:4012/api/mov/show`, this.show).subscribe((res: any) => {
+    this.http.post(`http://192.168.0.64:4012/api/mov/show`, this.show).subscribe((res: any) => {
       console.log(res);
       this.seasonNumbers = res.seasonsList.map(season => season.seasonNum + 1)
       this.seasons = res.seasonsList

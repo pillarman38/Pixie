@@ -18,7 +18,7 @@ var fse = require('fs-extra')
 // var io = require('socket.io')(server)
 var { spawn } = require('child_process')
 var fetch = require('node-fetch')
-// var ws = new WebSocket(`wsz://192.168.4.1:4013`)
+// var ws = new WebSocket(`wsz://192.168.0.64:4013`)
 // var wss = new WebSocket.Server({
 //     port: 4013
 // })
@@ -45,14 +45,14 @@ let routeFunctions = {
         var arrOfObj = []
 
         function re() {
-            return fs.readdirSync(`/home/pi/Desktop/Movies`, { withFileTypes: true })
+            return fs.readdirSync(`/home/connor/Desktop/Movies`, { withFileTypes: true })
             .filter(dirent => dirent.isDirectory())
             .map(dirent => dirent['name'])
         }
         
         var arrToFilterWith = re()
 
-        pool.query(`SELECT * FROM movieInfo LIMIT 50`, (err, res) => {
+        pool.query(`SELECT * FROM movies LIMIT 50`, (err, res) => {
             // var resToFilterWith = res.map(itm => itm['title'])
             // var filteredArr = arrToFilterWith.filter(function(e) {
             //     return this.indexOf(e) < 0;
@@ -76,8 +76,8 @@ let routeFunctions = {
             }
                             
             if(body['results'].length > 0) {
-                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['backdrop_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['backdrop_path']}`)
-                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['poster_path']}`, `/home/pi/Desktop/Movies/${movie}/${body['results'][0]['poster_path']}`)
+                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['backdropPath']}`, `/home/connor/Desktop/Movies/${movie}/${body['results'][0]['backdropPath']}`)
+                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['posterPath']}`, `/home/connor/Desktop/Movies/${movie}/${body['results'][0]['posterPath']}`)
                             
                 var bod = await fetch(`https://api.themoviedb.org/3/movie/${body['results'][0]['id']}/credits?api_key=490cd30bbbd167dd3eb65511a8bf2328&language=en-US`)
                 var bodyTwo = await bod.json()
@@ -101,17 +101,17 @@ let routeFunctions = {
                         // } else {
                             
                             console.log(body['results'][0]['overview']);
-                            // if(body['results'][0]['backdrop_path'] != null) {
+                            // if(body['results'][0]['backdropPath'] != null) {
                                 var finalObj = {
                                     title: movie,
                                     cast: '',
                                     overview: body['results'][0]['overview'] ?? '',
-                                    backdrop_path: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['poster_path'].replace("/", "")}` ?? 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
-                                    poster_path: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['poster_path'].replace("/", "")}` ?? 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
-                                    location: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                                    backdropPath: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['posterPath'].replace("/", "")}` ?? 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
+                                    posterPath: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['posterPath'].replace("/", "")}` ?? 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
+                                    location: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
                                 }
                                 // console.log("FINAL OBJ: ", finalObj)
-                                pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
+                                pool.query(`INSERT INTO movies SET ?`,finalObj, (err,resp) => {
                                     console.log(err, resp);
                                 })
 
@@ -121,12 +121,12 @@ let routeFunctions = {
                                 title: movie,
                                 cast: '',
                                 overview: '',
-                                backdrop_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
-                                poster_path: 'http://192.168.4.1:4012/404-50x70_3a189.jpg',
-                                location: `http://192.168.4.1:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                                backdropPath: 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
+                                posterPath: 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
+                                location: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
                             }
                             // console.log("FINAL OBJ: ", finalObj)
-                            pool.query(`INSERT INTO movieInfo SET ?`,finalObj, (err,resp) => {
+                            pool.query(`INSERT INTO movies SET ?`,finalObj, (err,resp) => {
                                 console.log(err, resp);
                             })
                         }
@@ -136,13 +136,13 @@ let routeFunctions = {
     },
 
         getMoreMoviesOnScroll: (selectionToUpdate, callback) => {
-            pool.query(`SELECT * FROM movieInfo WHERE id > '${selectionToUpdate.id}' LIMIT 50`, (err, res)=>{
+            pool.query(`SELECT * FROM movies WHERE id > '${selectionToUpdate.id}' LIMIT 50`, (err, res)=>{
                 callback(err, res)
             })
         },
 
         getTvList: (req, callback) => {
-            pool.query(`SELECT * FROM tv`, (err, res) => {
+            pool.query(`SELECT * FROM shows`, (err, res) => {
                 console.log(err, res);
                 callback(err, res)
             })
@@ -179,7 +179,7 @@ let routeFunctions = {
                         //     extensionRepalcer = files[i]['filename'].substr(0, files[i]['filename'].lastIndexOf(".")) + "_thumb.heic"
                     }
                     
-                    var newProc = exec(`ffmpeg -i '/home/pi/Desktop/Media/${files[i]['filename']}' -vf scale=200:-1 /home/pi/Desktop/Media/${extensionRepalcer}`)
+                    var newProc = exec(`ffmpeg -i '/home/connor/Desktop/Media/${files[i]['filename']}' -vf scale=200:-1 /home/connor/Desktop/Media/${extensionRepalcer}`)
                     newProc.on('error', function(err) {
                         console.log("hi", err);
                     })
@@ -193,8 +193,8 @@ let routeFunctions = {
                         console.log("why", close, i, files.length);
                         
                         var addedMedia = {
-                            location: `http://192.168.4.1:4012/${files[i]['filename'].replace(new RegExp(' ', 'g'), '%20')}`,
-                            thumbnail: `http://192.168.4.1:4012/${extensionRepalcer}`,
+                            location: `http://192.168.0.64:4012/${files[i]['filename'].replace(new RegExp(' ', 'g'), '%20')}`,
+                            thumbnail: `http://192.168.0.64:4012/${extensionRepalcer}`,
                             type: files[i]['mimetype']
                         }
                         
@@ -241,9 +241,9 @@ let routeFunctions = {
     },
     dirinfogetter: (callback) => {
 	
-        fs.readdir('/media/pi/USB Drive1', (err, files) =>{
+        fs.readdir('/media/connor/USB Drive1', (err, files) =>{
             
-	    var mainMovies = fs.readdirSync(`/home/pi/Desktop/Movies`)
+	    var mainMovies = fs.readdirSync(`/home/connor/Desktop/Movies`)
             console.log(mainMovies, files)
 	    var filesystemObj = {
 		usb: files,
@@ -257,16 +257,16 @@ let routeFunctions = {
         console.log("Item: ", itm)
         var files = fs.readdirSync(`/media/pi`)
         console.log("FILES: ", files)
-        const source = `/media/pi/USB Drive1/${itm}`
-        const destination = `/home/pi/Desktop/Movies/${itm}`
+        const source = `/media/connor/USB Drive1/${itm}`
+        const destination = `/home/connor/Desktop/Movies/${itm}`
 
-        fs.mkdir(`/home/pi/Desktop/Movies/${itm}`, (err) => {
+        fs.mkdir(`/home/connor/Desktop/Movies/${itm}`, (err) => {
                 if(err) {
             console.log(err)
                     return err
                 }
             })
-            var copyMovie = spawn('rsync', ['-r', '--progress', `/media/pi/USB Drive1/${[itm]}`, '/home/pi/Desktop/Movies'])
+            var copyMovie = spawn('rsync', ['-r', '--progress', `/media/connor/USB Drive1/${[itm]}`, '/home/connor/Desktop/Movies'])
             copyMovie.on('data',(err) => {
                 console.log("Copy error", err);
                 
@@ -294,7 +294,7 @@ let routeFunctions = {
 
 deleter: (itm, callback) => {
 console.log("ITM", itm)
-    var newProc = exec(`sudo rm -rf /home/pi/Desktop/Movies/"${itm}"`)
+    var newProc = exec(`sudo rm -rf /home/connor/Desktop/Movies/"${itm}"`)
 
         newProc.on('error', function(data) {
             console.log(data)
@@ -313,7 +313,7 @@ callback("deleted")
 },
 
 eject:(callback) => {
-    var newProc = exec('sudo umount /media/pi/USB Drive1/')
+    var newProc = exec('sudo umount /media/connor/USB Drive1/')
 
         newProc.on('error', function(data) {
             console.log(data)

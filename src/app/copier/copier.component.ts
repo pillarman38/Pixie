@@ -26,26 +26,26 @@ export class CopierComponent implements OnInit {
   constructor(private http: HttpClient,  private webSocket: WebsocketService) { }
   
   eject() {
-    this.http.get(`http://192.168.4.1:4012/api/mov/eject`).subscribe((res: any) => {
+    this.http.get(`http://192.168.0.64:4012/api/mov/eject`).subscribe((res: any) => {
       console.log(res);
     })
   }
 
   delete(itm) {
     console.log(itm)
-    this.http.post(`http://192.168.4.1:4012/api/mov/deleter`, {toDelete: itm}, {reportProgress: true, observe: 'events'}).subscribe((res) => {
+    this.http.post(`http://192.168.0.64:4012/api/mov/deleter`, {toDelete: itm}, {reportProgress: true, observe: 'events'}).subscribe((res) => {
       console.log(res);
     })
   }
 
   move(e) {
     console.log(e)
-    this.http.post(`http://192.168.4.1:4012/api/mov/mover`, {toMove: e}).subscribe((res: any) => {
+    this.http.post(`http://192.168.0.64:4012/api/mov/mover`, {toMove: e}).subscribe((res: any) => {
       console.log(res);
     })
   }
   ngOnInit(): void {
-    this.http.get('http://192.168.4.1:4012/api/mov/dirinfogetter').subscribe((data: any) => {
+    this.http.get('http://192.168.0.64:4012/api/mov/dirinfogetter').subscribe((data: any) => {
       this.filesystem = data['filesystem']
       this.usb = data['usb']
       console.log(data);

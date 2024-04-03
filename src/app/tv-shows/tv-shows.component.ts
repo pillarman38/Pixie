@@ -21,7 +21,7 @@ export class TvShowsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get('http://192.168.4.1:4012/api/mov/tvList').subscribe((res) => {
+    this.http.get('http://192.168.0.64:4012/api/mov/tvList').subscribe((res) => {
       console.log(res);
       
       this.selection =  res

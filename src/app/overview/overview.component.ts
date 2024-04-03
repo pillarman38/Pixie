@@ -20,8 +20,8 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.cast = this.clickedMovie.saveVideo['cast'] ? JSON.parse(this.clickedMovie.saveVideo['cast']) : {}
   }
   ngAfterViewInit() {
-    console.log(this.cast, this.somecontent, this.clickedMovie.saveVideo['poster_path'])
-    this.somecontent.nativeElement.style.backgroundImage = `url('${this.clickedMovie.saveVideo['poster_path']}')`
+    console.log(this.cast, this.somecontent, this.clickedMovie.saveVideo['posterPath'])
+    this.somecontent.nativeElement.style.backgroundImage = `url('${this.clickedMovie.saveVideo['posterPath']}')`
     this.somecontent.nativeElement.style.backgroundSize = "cover"
     this.somecontent.nativeElement.style.backgroundRepeat = "no-repeat"
     this.somecontent.nativeElement.style.zIndex = "-20"

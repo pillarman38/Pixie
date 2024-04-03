@@ -21,7 +21,7 @@ export class VideoSelectionComponent implements OnInit {
     // console.log("scrolling: ", (window.innerHeight + window.scrollY + 16), event.srcElement.scrollingElement.scrollHeight)
 
     if((window.innerHeight + window.scrollY + 16) >= event.srcElement.scrollingElement.scrollHeight && this.isLoading == false) {
-      const prom = this.http.post('http://192.168.4.1:4012/api/mov/moreMoviesOnScroll', (this.selection[this.selection.length - 1])).toPromise()
+      const prom = this.http.post('http://192.168.0.64:4012/api/mov/moreMoviesOnScroll', (this.selection[this.selection.length - 1])).toPromise()
       console.log("waiting");
       this.isLoading = true
 
@@ -47,7 +47,7 @@ export class VideoSelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get('http://192.168.4.1:4012/api/mov/movieListOnStartup').subscribe((res: any[]) => {
+    this.http.get('http://192.168.0.64:4012/api/mov/movieListOnStartup').subscribe((res: any[]) => {
       console.log(res)
       this.selection = res
     })
@@ -55,7 +55,7 @@ export class VideoSelectionComponent implements OnInit {
       console.log(res);
       
       if(res === 'trigger') {
-        this.http.get('http://192.168.4.1:4012/api/mov/movieListOnStartup').subscribe((res: any[]) => {
+        this.http.get('http://192.168.0.64:4012/api/mov/movieListOnStartup').subscribe((res: any[]) => {
           console.log(res)
           this.selection = res
         })

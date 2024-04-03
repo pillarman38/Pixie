@@ -4,7 +4,7 @@ let models = require('../models/movies.models')
 let tv = require('../models/tv.models')
 let multer = require('multer')
 let search = require('../models/search.models')
-let photoPath = "/home/pi/Desktop/Media"
+let photoPath = "/home/connor/Desktop/Media"
 let pixieUpdater = require('../models/pixieUpdater')
 
 

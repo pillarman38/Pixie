@@ -59,7 +59,7 @@ export class PhotoBoothComponent implements OnInit {
         percent: 0,
         index: this.i,
         type: extention,
-        location: `http://192.168.4.1:4012/${fileName.replace(new RegExp(' ', 'g'), '%20')}`,
+        location: `http://192.168.0.64:4012/${fileName.replace(new RegExp(' ', 'g'), '%20')}`,
         title: e.target.files[this.i]['name']
       }
       if(uploadObj['type'] === "image/png" || uploadObj['type'] === "image/jpeg" || uploadObj['type'] === "HEIC") {
@@ -68,7 +68,7 @@ export class PhotoBoothComponent implements OnInit {
       if(uploadObj['type'] === "video/quicktime" || uploadObj['type'] === "mp4" || uploadObj['type'] === "MOV") {
         this.arrOfVideos.push(uploadObj)
       }
-      this.http.post("http://192.168.4.1:4012/api/mov/uploadmedia", formData, {
+      this.http.post("http://192.168.0.64:4012/api/mov/uploadmedia", formData, {
           reportProgress: true,
           observe: "events"
         }).subscribe((data) => {
@@ -114,7 +114,7 @@ export class PhotoBoothComponent implements OnInit {
   }
 
   getPhotos() {
-    this.http.get('http://192.168.4.1:4012/api/mov/getmedia').subscribe((data: any[]) => {
+    this.http.get('http://192.168.0.64:4012/api/mov/getmedia').subscribe((data: any[]) => {
       console.log(data)
       this.videos = data.filter(itm => itm.type != "image/jpeg")
       this.photosBefore = data.filter(itm => itm.type != "video/quicktime")

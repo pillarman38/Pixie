@@ -30,13 +30,13 @@ export class AppComponent implements OnInit {
   power(){
     this.powerMsgs = "Off"
     this.showsUI = false
-    this.http.get('http://192.168.4.1:4012/api/mov/power').subscribe((res: any[]) => {
+    this.http.get('http://192.168.0.64:4012/api/mov/power').subscribe((res: any[]) => {
       console.log(res)
     })
   }
 
   ngOnInit() {
-    const subject = webSocket('ws://192.168.4.1:4015');
+    const subject = webSocket('ws://192.168.0.64:4015');
 
     // this.subject.message(JSON.stringify(this.syncingMovie));
     subject.subscribe({
@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
       error: err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
       complete: () => console.log('complete') // Called when connection is closed (for whatever reason).
      });
-    // this.http.get('http://192.168.4.1:4012/api/mov/overviewupdate').subscribe((res) => {
+    // this.http.get('http://192.168.0.64:4012/api/mov/overviewupdate').subscribe((res) => {
     //   console.log(res);
     // })
     this.router.navigateByUrl('/videoSelection')

@@ -9,7 +9,7 @@ export class WebsocketService {
 
   triggerMovieRequest = new Subject();
   socket: any;
-  uri = "ws://localhost:4015"
+  uri = "ws://192.168.0.64:4015"
 
   constructor() {}
 
