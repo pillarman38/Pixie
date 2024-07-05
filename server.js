@@ -33,7 +33,7 @@ app.get('*', (req, res) =>{
 })
 
 server.listen(port, async () => {
-  await pixieUpdater()
+  // await pixieUpdater()
   console.log(`Server running on port ${port}`)
 });
 

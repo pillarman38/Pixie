@@ -18,8 +18,6 @@ export class VideoSelectionComponent implements OnInit {
   isLoading = false;
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
-    // console.log("scrolling: ", (window.innerHeight + window.scrollY + 16), event.srcElement.scrollingElement.scrollHeight)
-
     if((window.innerHeight + window.scrollY + 16) >= event.srcElement.scrollingElement.scrollHeight && this.isLoading == false) {
       const prom = this.http.post('http://192.168.0.64:4012/api/mov/moreMoviesOnScroll', (this.selection[this.selection.length - 1])).toPromise()
       console.log("waiting");
