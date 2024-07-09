@@ -42,7 +42,6 @@
     "rxjs": "~6.5.5",
     "socket.io-client": "^2.4.0",
     "tslib": "^2.0.0",
-    "webpack": "^5.92.1",
     "websocket": "^1.0.34",
     "ws": "^7.5.9",
     "zone.js": "~0.11.4"

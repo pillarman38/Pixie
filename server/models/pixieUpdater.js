@@ -32,7 +32,7 @@ let epsToTranscode = [];
 
 async function getMoviePoster() {
   const res = await fetch(
-    `http://192.168.0.154:4012/MoviePosters/${notYetAddedMovies[i].title}.jpg`
+    `http://192.168.0.153:4012/MoviePosters/${notYetAddedMovies[i].title}.jpg`
   );
   const fileStream = fs.createWriteStream(
     `/home/connor/Desktop/Movies/${notYetAddedMovies[i].title}/${notYetAddedMovies[i].title}-poster.jpg`
@@ -67,7 +67,7 @@ async function getMoviePoster() {
 
 async function getCoverArt() {
   const res = await fetch(
-    `http://192.168.0.154:4012/MovieCoverArt/${notYetAddedMovies[i].title}.jpg`
+    `http://192.168.0.153:4012/MovieCoverArt/${notYetAddedMovies[i].title}.jpg`
   );
   const fileStream = fs.createWriteStream(
     `/home/connor/Desktop/Movies/${notYetAddedMovies[i].title}/${notYetAddedMovies[i].title}.jpg`
@@ -112,7 +112,7 @@ async function startDownloading() {
     );
   }
   const res = await fetch(
-    `http://192.168.0.154:4012/toPixie/${notYetAddedMovies[i].title}.mp4`
+    `http://192.168.0.153:4012/toPixie/${notYetAddedMovies[i].title}.mp4`
   );
   const fileStream = fs.createWriteStream(
     `/home/connor/Desktop/Movies/${notYetAddedMovies[i].title}/${notYetAddedMovies[i].title}.mp4`
@@ -170,7 +170,7 @@ async function startDownloading() {
               startTranscoding();
             } else {
               console.log("Movies done...");
-              // getTVShows();
+              getTVShows();
             }
 
             resolve();
@@ -183,7 +183,7 @@ async function startDownloading() {
 }
 
 async function saveSeasonToDB() {
-  const seasonFetch = await fetch("http://192.168.0.154:4012/api/mov/season", {
+  const seasonFetch = await fetch("http://192.168.0.153:4012/api/mov/season", {
     method: "post",
     body: JSON.stringify({
       show: epsToTranscode[currentConvertingEp].title,
@@ -236,7 +236,7 @@ async function startDownloadingTV(message) {
     // console.log('INCOMING: ', er, ress, message);
 
     const res = await fetch(
-      `http://192.168.0.154:4012/toPixie/${message.epTitle}.mp4`
+      `http://192.168.0.153:4012/toPixie/${message.epTitle}.mp4`
     );
     const fileStream = fs.createWriteStream(
       `/media/connor/X9 Pro/TV/Shows/${epsToTranscode[currentConvertingEp].title}/Season ${message.season}/${message.epTitle}.mp4`
@@ -321,7 +321,7 @@ async function startTranscoding() {
       })
     );
   } else {
-    // getTVShows();
+    getTVShows();
   }
 }
 
@@ -474,11 +474,11 @@ async function syncTVShows(showsFromPixable, savedShows) {
 
         await getTVPoster(
           storedButNotSavedToDB[l].title,
-          `http://192.168.0.154:4012/tvPosters/${storedButNotSavedToDB[l].title}.jpg`
+          `http://192.168.0.153:4012/tvPosters/${storedButNotSavedToDB[l].title}.jpg`
         );
         await getTVCoverArt(
           storedButNotSavedToDB[l].title,
-          `http://192.168.0.154:4012/tvCoverArt/${storedButNotSavedToDB[l].title}.jpg`
+          `http://192.168.0.153:4012/tvCoverArt/${storedButNotSavedToDB[l].title}.jpg`
         );
         pool.query(`INSERT INTO shows SET ?`, showStoreObj, async (er, re) => {
           console.log(er, re);
@@ -520,7 +520,7 @@ async function syncEps() {
   }
 
   readAllFiles(dirPath);
-  let epsFromPixable = await fetch(`http://192.168.0.154:4012/api/mov/eplist`);
+  let epsFromPixable = await fetch(`http://192.168.0.153:4012/api/mov/eplist`);
   epsFromPixable = await epsFromPixable.json();
   let pixableTitlesOnly = epsFromPixable.map((ep) => ep.epTitle);
 
@@ -533,7 +533,7 @@ async function syncEps() {
 }
 
 async function getTVShows() {
-  shows = await fetch("http://192.168.0.154:4012/api/mov/tv", {
+  shows = await fetch("http://192.168.0.153:4012/api/mov/tv", {
     method: "post",
     body: JSON.stringify({ pid: 0 }),
     headers: { "Content-Type": "application/json" },
@@ -634,7 +634,7 @@ async function syncMoviesDB(pixieMovieList, savedMovies) {
               l += 1;
               saveToDB();
             } else {
-              // getTVShows();
+              getTVShows();
               resolve();
             }
           }
@@ -655,7 +655,7 @@ async function wsConnection() {
   async function getMovieList() {
     try {
       pixableMovieList = await fetch(
-        "http://192.168.0.154:4012/api/mov/movies",
+        "http://192.168.0.153:4012/api/mov/movies",
         {
           method: "post",
           body: JSON.stringify({ pid: 0 }),
@@ -713,7 +713,7 @@ async function wsConnection() {
     };
   });
 
-  client.connect("http://192.168.0.154:4444");
+  client.connect("http://192.168.0.153:4444");
   client.on(`connectFailed`, function (err) {
     console.log("Websocket connection error" + err);
   });
