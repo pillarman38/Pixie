@@ -3,7 +3,7 @@
 
     <div id="results">
         <div *ngFor="let res of results" (click)="selected(res)" class="results">
-            <img src="{{res.backdropPath}}" class="posters">
+            <img src="{{res.backgroundPoster}}" class="posters">
             <p>{{res.title}}</p>
         </div>
     </div>

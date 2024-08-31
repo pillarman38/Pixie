@@ -1,0 +1,15 @@
+<div id="wrapper">
+    <div *ngIf="!switchedToHotSpot">
+        <div>
+            <div id="hotspotBtn" (click)="switchToHotSpot()">Hotspot Mode</div>
+        </div>
+        <div *ngFor="let network of networksList">
+            <div (click)="selectedNetwork(network)">
+                <p>{{network.ssid}} - {{network.freq}} GHz</p>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="switchedToHotSpot">
+        <p>Switched to Pixie</p>
+    </div>
+</div>

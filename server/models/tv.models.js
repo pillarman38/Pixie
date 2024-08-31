@@ -17,7 +17,7 @@ var fse = require('fs-extra')
 // var io = require('socket.io')(server)
 var { spawn } = require('child_process')
 var fetch = require('node-fetch')
-// var ws = new WebSocket(`wsz://192.168.0.64:4013`)
+// var ws = new WebSocket(`wsz://pixie.local:4013`)
 // var wss = new WebSocket.Server({
 //     port: 4013
 // })
@@ -25,8 +25,9 @@ var fetch = require('node-fetch')
 let tvFunctions = {
     getShow: (show, callback) => {
         pool.query(`SELECT * FROM shows WHERE title = '${show.title}'`, (err, res) => {
-            pool.query(`SELECT * FROM seasons WHERE title = '${show.title}'`, (er, seasons) => {
-                pool.query(`SELECT * FROM episodes WHERE title = '${show.title}'`, (e, r) => {
+            pool.query(`SELECT * FROM seasons WHERE show = '${show.title}'`, (er, seasons) => {
+                pool.query(`SELECT * FROM episodes WHERE showTitle = '${show.title}'`, (e, r) => {
+
                     let seasonsList = []
                     let seasonGrabFromEp = r.map(episode => episode.season)
                     let setSeasons = [...new Set(seasonGrabFromEp)] 
@@ -37,8 +38,8 @@ let tvFunctions = {
                         const seasonObj = {
                             title: res.title,
                             episodes: seasonEps,
-                            seasonNum: i,
-                            poster: seasons[i] ? seasons[i].poster : `http://192.168.0.64:4012/assets/images/four0four.gif`
+                            seasonNum: i
+                            // poster: seasons[i] ? seasons[i].poster : `http://pixie.local:4012/assets/images/four0four.gif`
                         }
                         seasonsList.push(seasonObj)
                     }

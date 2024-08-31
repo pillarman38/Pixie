@@ -18,7 +18,7 @@ var fse = require('fs-extra')
 // var io = require('socket.io')(server)
 var { spawn } = require('child_process')
 var fetch = require('node-fetch')
-// var ws = new WebSocket(`wsz://192.168.0.64:4013`)
+// var ws = new WebSocket(`wsz://pixie.local:4013`)
 // var wss = new WebSocket.Server({
 //     port: 4013
 // })
@@ -76,7 +76,7 @@ let routeFunctions = {
             }
                             
             if(body['results'].length > 0) {
-                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['backdropPath']}`, `/home/connor/Desktop/Movies/${movie}/${body['results'][0]['backdropPath']}`)
+                download(`https://image.tmdb.org/t/p/w500${body['results'][0]['backgroundPoster']}`, `/home/connor/Desktop/Movies/${movie}/${body['results'][0]['backgroundPoster']}`)
                 download(`https://image.tmdb.org/t/p/w500${body['results'][0]['posterPath']}`, `/home/connor/Desktop/Movies/${movie}/${body['results'][0]['posterPath']}`)
                             
                 var bod = await fetch(`https://api.themoviedb.org/3/movie/${body['results'][0]['id']}/credits?api_key=490cd30bbbd167dd3eb65511a8bf2328&language=en-US`)
@@ -101,14 +101,14 @@ let routeFunctions = {
                         // } else {
                             
                             console.log(body['results'][0]['overview']);
-                            // if(body['results'][0]['backdropPath'] != null) {
+                            // if(body['results'][0]['backgroundPoster'] != null) {
                                 var finalObj = {
                                     title: movie,
                                     cast: '',
                                     overview: body['results'][0]['overview'] ?? '',
-                                    backdropPath: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['posterPath'].replace("/", "")}` ?? 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
-                                    posterPath: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['posterPath'].replace("/", "")}` ?? 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
-                                    location: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                                    backgroundPoster: `http://pixie.local:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['posterPath'].replace("/", "")}` ?? 'http://pixie.local:4012/404-50x70_3a189.jpg',
+                                    posterPath: `http://pixie.local:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${body['results'][0]['posterPath'].replace("/", "")}` ?? 'http://pixie.local:4012/404-50x70_3a189.jpg',
+                                    location: `http://pixie.local:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
                                 }
                                 // console.log("FINAL OBJ: ", finalObj)
                                 pool.query(`INSERT INTO movies SET ?`,finalObj, (err,resp) => {
@@ -121,9 +121,9 @@ let routeFunctions = {
                                 title: movie,
                                 cast: '',
                                 overview: '',
-                                backdropPath: 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
-                                posterPath: 'http://192.168.0.64:4012/404-50x70_3a189.jpg',
-                                location: `http://192.168.0.64:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
+                                backgroundPoster: 'http://pixie.local:4012/404-50x70_3a189.jpg',
+                                posterPath: 'http://pixie.local:4012/404-50x70_3a189.jpg',
+                                location: `http://pixie.local:4012/${movie.replace(new RegExp(" ", "g"), "%20")}/${movie.replace(new RegExp(" ", "g"), "%20")}.mp4`
                             }
                             // console.log("FINAL OBJ: ", finalObj)
                             pool.query(`INSERT INTO movies SET ?`,finalObj, (err,resp) => {
@@ -193,8 +193,8 @@ let routeFunctions = {
                         console.log("why", close, i, files.length);
                         
                         var addedMedia = {
-                            location: `http://192.168.0.64:4012/${files[i]['filename'].replace(new RegExp(' ', 'g'), '%20')}`,
-                            thumbnail: `http://192.168.0.64:4012/${extensionRepalcer}`,
+                            location: `http://pixie.local:4012/${files[i]['filename'].replace(new RegExp(' ', 'g'), '%20')}`,
+                            thumbnail: `http://pixie.local:4012/${extensionRepalcer}`,
                             type: files[i]['mimetype']
                         }
                         

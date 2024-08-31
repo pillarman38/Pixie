@@ -15,6 +15,9 @@ import { TvShowsComponent } from './tv-shows/tv-shows.component';
 import { HomeVideosComponent } from './home-videos/home-videos.component';
 import { SeasonSelectionComponent } from './season-selection/season-selection.component';
 import { SearchComponent } from './search/search.component';
+import { NetworkingComponent } from './networking/networking.component';
+import { EnterPasswordComponent } from './enter-password/enter-password.component';
+import { FormsModule } from '@angular/forms';
 
 const appRoutes = [
   {path: 'videoPlayer', component: VideoPlayerComponent},
@@ -26,7 +29,9 @@ const appRoutes = [
   {path: "homeVideos", component: HomeVideosComponent},
   {path: "tvshows", component: TvShowsComponent},
   {path: "seasonSelection", component: SeasonSelectionComponent},
-  {path: "search", component: SearchComponent}
+  {path: "search", component: SearchComponent},
+  {path: "networking", component: NetworkingComponent},
+  {path: "enterPassword", component: EnterPasswordComponent}
 ]
 
 @NgModule({
@@ -41,10 +46,13 @@ const appRoutes = [
     TvShowsComponent,
     HomeVideosComponent,
     SeasonSelectionComponent,
-    SearchComponent
+    SearchComponent,
+    EnterPasswordComponent,
+    NetworkingComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
     HttpClientModule,
     AppRoutingModule

@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
 import{ Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { webSocket } from 'rxjs/webSocket'
-import { WebsocketService } from './websocket.service';
+import { WebSocketService } from './websocket.service';
+import { FeaturesService } from './features.service';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +11,8 @@ import { WebsocketService } from './websocket.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'pibox';
+  title = 'pixie';
   hotspotornot = true
-  percentDone
   progressIsDone = false
   powerMsgs = "Power off"
   showsUI = true
@@ -25,18 +25,18 @@ export class AppComponent implements OnInit {
     title: undefined,
     percentage: undefined
   }
-  constructor(private router: Router, private http: HttpClient, private trigger: WebsocketService) { }
+  constructor(private router: Router, private http: HttpClient, private trigger: WebSocketService, private features: FeaturesService) { }
   
   power(){
     this.powerMsgs = "Off"
     this.showsUI = false
-    this.http.get('http://192.168.0.64:4012/api/mov/power').subscribe((res: any[]) => {
+    this.http.get('http://pixie.local:4012/api/mov/power').subscribe((res: any[]) => {
       console.log(res)
     })
   }
 
   ngOnInit() {
-    const subject = webSocket('ws://192.168.0.64:4015');
+    const subject = webSocket('ws://192.168.0.154:4444');
 
     // this.subject.message(JSON.stringify(this.syncingMovie));
     subject.subscribe({
@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
         this.syncingMovie = {
           backOrFront: 'frontend',
           title: msg.title,
-          percentage: Math.floor(msg.percentDone)
+          percentage: msg.percentage
         }
         if(msg.type === 'Syncing') {
           this.isSyncing = true
@@ -59,7 +59,8 @@ export class AppComponent implements OnInit {
         if(msg.type === 'Downloading' && this.syncingMovie.percentage === 100) {
           this.isSyncing = false
           this.isDownloading = false
-          this.trigger.triggerMovieRequest.next('trigger')
+          // this.trigger.triggerMovieRequest.next('trigger')
+          this.features.setData("done")
         }
         if(msg.type === "Syncing complete") {
           this.isSyncing = false
@@ -69,16 +70,17 @@ export class AppComponent implements OnInit {
           this.isSyncing = true
           this.isDownloading = true
         }
-        if(!msg.percentDone) {
+        if(msg.percentage === 100) {
           this.isSyncing = false
           this.isDownloading = false
+          // this.refreshMovieList()
         }
         
       }, // Called whenever there is a message from the server.
       error: err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
       complete: () => console.log('complete') // Called when connection is closed (for whatever reason).
      });
-    // this.http.get('http://192.168.0.64:4012/api/mov/overviewupdate').subscribe((res) => {
+    // this.http.get('http://pixie.local:4012/api/mov/overviewupdate').subscribe((res) => {
     //   console.log(res);
     // })
     this.router.navigateByUrl('/videoSelection')

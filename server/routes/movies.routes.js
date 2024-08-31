@@ -5,7 +5,7 @@ let tv = require('../models/tv.models')
 let multer = require('multer')
 let search = require('../models/search.models')
 let photoPath = "/home/connor/Desktop/Media"
-let pixieUpdater = require('../models/pixieUpdater')
+let pixieUpdater = require('../models/pixieUpdaterMovies')
 
 
 var storage = multer.diskStorage({

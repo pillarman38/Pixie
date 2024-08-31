@@ -26,7 +26,7 @@ export class SearchComponent implements OnInit {
   onKeypressEvent(e: any) {
     console.log("EVENT: ", e.target.value.length);
     
-    this.http.post(`http://192.168.0.64:4012/api/mov/search`, {searchVal: e.target.value}).subscribe((res: any) => {
+    this.http.post(`http://pixie.local:4012/api/mov/search`, {searchVal: e.target.value}).subscribe((res: any) => {
       this.results = res
     })
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { PhotoUploaderService } from '../photo-uploader.service';
-import { WebsocketService } from '../websocket.service';
+import { WebSocketService } from '../websocket.service';
 import { ClickedMovieService } from '../clicked-movie.service';
 import { from } from 'rxjs';
 import{ Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class PhotoBoothComponent implements OnInit {
   photosBefore = []
   photos = []
 
-  constructor(private http: HttpClient, private photoServ: PhotoUploaderService, private webSocket: WebsocketService, private clickedMovie: ClickedMovieService, private router: Router, private photoViewServ: PhotoViewService) { }
+  constructor(private http: HttpClient, private photoServ: PhotoUploaderService, private webSocket: WebSocketService, private clickedMovie: ClickedMovieService, private router: Router, private photoViewServ: PhotoViewService) { }
   getExtention(filename) {
     var parts = filename.split('.');
     return filename
@@ -59,7 +59,7 @@ export class PhotoBoothComponent implements OnInit {
         percent: 0,
         index: this.i,
         type: extention,
-        location: `http://192.168.0.64:4012/${fileName.replace(new RegExp(' ', 'g'), '%20')}`,
+        location: `http://pixie.local:4012/${fileName.replace(new RegExp(' ', 'g'), '%20')}`,
         title: e.target.files[this.i]['name']
       }
       if(uploadObj['type'] === "image/png" || uploadObj['type'] === "image/jpeg" || uploadObj['type'] === "HEIC") {
@@ -68,7 +68,7 @@ export class PhotoBoothComponent implements OnInit {
       if(uploadObj['type'] === "video/quicktime" || uploadObj['type'] === "mp4" || uploadObj['type'] === "MOV") {
         this.arrOfVideos.push(uploadObj)
       }
-      this.http.post("http://192.168.0.64:4012/api/mov/uploadmedia", formData, {
+      this.http.post("http://pixie.local:4012/api/mov/uploadmedia", formData, {
           reportProgress: true,
           observe: "events"
         }).subscribe((data) => {
@@ -114,7 +114,7 @@ export class PhotoBoothComponent implements OnInit {
   }
 
   getPhotos() {
-    this.http.get('http://192.168.0.64:4012/api/mov/getmedia').subscribe((data: any[]) => {
+    this.http.get('http://pixie.local:4012/api/mov/getmedia').subscribe((data: any[]) => {
       console.log(data)
       this.videos = data.filter(itm => itm.type != "image/jpeg")
       this.photosBefore = data.filter(itm => itm.type != "video/quicktime")

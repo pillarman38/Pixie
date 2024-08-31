@@ -1,4 +1,4 @@
-process.env.host = "localhost"
-process.env.user = "root"
+process.env.host = "127.0.0.1"
+process.env.user = "admin"
 process.env.password = "root"
-process.env.database = "pixie"
+process.env.database = "Pixie"

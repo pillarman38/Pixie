@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pibox": {
+    "pixie": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/pibox",
+            "outputPath": "dist/pixie",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pibox:build"
+            "browserTarget": "pixie:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "pibox:build:production"
+              "browserTarget": "pixie:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pibox:build"
+            "browserTarget": "pixie:build"
           }
         },
         "test": {
@@ -115,18 +115,17 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "pibox:serve"
+            "devServerTarget": "pixie:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "pibox:serve:production"
+              "devServerTarget": "pixie:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "pibox",
   "cli": {
     "analytics": false
   }

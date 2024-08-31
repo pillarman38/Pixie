@@ -3,10 +3,10 @@
     <div *ngIf="showsUI">
         <a routerLink="videoSelection" class="button" routerLinkActive="active">Movies</a>
         <a routerLink="tvshows" class="button" routerLinkActive="active">tv shows</a>
+        <a routerLink="networking" class="button" routerLinkActive="active">Wifi</a>
         <!-- <a routerLink="copier" class="button" routerLinkActive="active">Disk</a> -->
         <!-- <a routerLink="photoBooth" class="button" routerLinkActive="active">Photos</a> -->
     </div>
-
 
     <div *ngIf="isSyncing">
         <div *ngIf="!isDownloading">
@@ -19,7 +19,10 @@
             </div>
             <div *ngIf="isDownloading">
                 <div id="powerBtnDownload">
-                    <p>Downloading {{syncingMovie.title}}</p>
+                    <div id="progressBar" style="width: {{syncingMovie.percentage}}%"> Downloading
+                        {{syncingMovie.percentage}}
+                    </div>
+                    {{syncingMovie.title}}
                 </div>
             </div>
     </div>
